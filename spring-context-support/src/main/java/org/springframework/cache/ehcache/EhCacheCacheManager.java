@@ -33,8 +33,8 @@ import org.springframework.util.Assert;
  * @author Costin Leau
  * @author Juergen Hoeller
  * @author Stephane Nicoll
- * @since 3.1
  * @see EhCacheCache
+ * @since 3.1
  */
 public class EhCacheCacheManager extends AbstractTransactionSupportingCacheManager {
 
@@ -51,6 +51,7 @@ public class EhCacheCacheManager extends AbstractTransactionSupportingCacheManag
 
 	/**
 	 * Create a new EhCacheCacheManager for the given backing EhCache CacheManager.
+	 *
 	 * @param cacheManager the backing EhCache {@link net.sf.ehcache.CacheManager}
 	 */
 	public EhCacheCacheManager(net.sf.ehcache.CacheManager cacheManager) {

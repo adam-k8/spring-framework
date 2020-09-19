@@ -51,9 +51,10 @@ public class JsonPathExpectationsHelper {
 
 	/**
 	 * Construct a new {@code JsonPathExpectationsHelper}.
+	 *
 	 * @param expression the {@link JsonPath} expression; never {@code null} or empty
-	 * @param args arguments to parameterize the {@code JsonPath} expression with,
-	 * using formatting specifiers defined in {@link String#format(String, Object...)}
+	 * @param args       arguments to parameterize the {@code JsonPath} expression with,
+	 *                   using formatting specifiers defined in {@link String#format(String, Object...)}
 	 */
 	public JsonPathExpectationsHelper(String expression, Object... args) {
 		Assert.hasText(expression, "expression must not be null or empty");
@@ -65,6 +66,7 @@ public class JsonPathExpectationsHelper {
 	/**
 	 * Evaluate the JSON path expression against the supplied {@code content}
 	 * and assert the resulting value with the given {@code Matcher}.
+	 *
 	 * @param content the JSON content
 	 * @param matcher the matcher with which to assert the result
 	 */
@@ -78,8 +80,9 @@ public class JsonPathExpectationsHelper {
 	 * An overloaded variant of {@link #assertValue(String, Matcher)} that also
 	 * accepts a target type for the resulting value. This can be useful for
 	 * matching numbers reliably for example coercing an integer into a double.
-	 * @param content the JSON content
-	 * @param matcher the matcher with which to assert the result
+	 *
+	 * @param content    the JSON content
+	 * @param matcher    the matcher with which to assert the result
 	 * @param targetType the expected type of the resulting value
 	 * @since 4.3.3
 	 */
@@ -92,7 +95,8 @@ public class JsonPathExpectationsHelper {
 	/**
 	 * Evaluate the JSON path expression against the supplied {@code content}
 	 * and assert that the result is equal to the expected value.
-	 * @param content the JSON content
+	 *
+	 * @param content       the JSON content
 	 * @param expectedValue the expected value
 	 */
 	public void assertValue(String content, @Nullable Object expectedValue) {
@@ -108,17 +112,15 @@ public class JsonPathExpectationsHelper {
 						" instead of the expected single value " + expectedValue);
 			}
 			actualValue = actualValueList.get(0);
-		}
-		else if (actualValue != null && expectedValue != null &&
+		} else if (actualValue != null && expectedValue != null &&
 				!actualValue.getClass().equals(expectedValue.getClass())) {
 			try {
 				actualValue = evaluateJsonPath(content, expectedValue.getClass());
-			}
-			catch (AssertionError error) {
+			} catch (AssertionError error) {
 				String message = String.format(
-					"At JSON path \"%s\", value <%s> of type <%s> cannot be converted to type <%s>",
-					this.expression, actualValue, ClassUtils.getDescriptiveType(actualValue),
-					ClassUtils.getDescriptiveType(expectedValue));
+						"At JSON path \"%s\", value <%s> of type <%s> cannot be converted to type <%s>",
+						this.expression, actualValue, ClassUtils.getDescriptiveType(actualValue),
+						ClassUtils.getDescriptiveType(expectedValue));
 				throw new AssertionError(message, error.getCause());
 			}
 		}
@@ -128,6 +130,7 @@ public class JsonPathExpectationsHelper {
 	/**
 	 * Evaluate the JSON path expression against the supplied {@code content}
 	 * and assert that the resulting value is a {@link String}.
+	 *
 	 * @param content the JSON content
 	 * @since 4.2.1
 	 */
@@ -139,6 +142,7 @@ public class JsonPathExpectationsHelper {
 	/**
 	 * Evaluate the JSON path expression against the supplied {@code content}
 	 * and assert that the resulting value is a {@link Boolean}.
+	 *
 	 * @param content the JSON content
 	 * @since 4.2.1
 	 */
@@ -150,6 +154,7 @@ public class JsonPathExpectationsHelper {
 	/**
 	 * Evaluate the JSON path expression against the supplied {@code content}
 	 * and assert that the resulting value is a {@link Number}.
+	 *
 	 * @param content the JSON content
 	 * @since 4.2.1
 	 */
@@ -161,6 +166,7 @@ public class JsonPathExpectationsHelper {
 	/**
 	 * Evaluate the JSON path expression against the supplied {@code content}
 	 * and assert that the resulting value is an array.
+	 *
 	 * @param content the JSON content
 	 */
 	public void assertValueIsArray(String content) {
@@ -171,6 +177,7 @@ public class JsonPathExpectationsHelper {
 	/**
 	 * Evaluate the JSON path expression against the supplied {@code content}
 	 * and assert that the resulting value is a {@link Map}.
+	 *
 	 * @param content the JSON content
 	 * @since 4.2.1
 	 */
@@ -186,6 +193,7 @@ public class JsonPathExpectationsHelper {
 	 * <p>Note that if the JSON path expression is not
 	 * {@linkplain JsonPath#isDefinite() definite}, this method asserts
 	 * that the list of values at the given path is not <em>empty</em>.
+	 *
 	 * @param content the JSON content
 	 */
 	public void exists(String content) {
@@ -198,21 +206,20 @@ public class JsonPathExpectationsHelper {
 	 * <p>Note that if the JSON path expression is not
 	 * {@linkplain JsonPath#isDefinite() definite}, this method asserts
 	 * that the list of values at the given path is <em>empty</em>.
+	 *
 	 * @param content the JSON content
 	 */
 	public void doesNotExist(String content) {
 		Object value;
 		try {
 			value = evaluateJsonPath(content);
-		}
-		catch (AssertionError ex) {
+		} catch (AssertionError ex) {
 			return;
 		}
 		String reason = failureReason("no value", value);
 		if (pathIsIndefinite() && value instanceof List) {
 			AssertionErrors.assertTrue(reason, ((List<?>) value).isEmpty());
-		}
-		else {
+		} else {
 			AssertionErrors.assertTrue(reason, (value == null));
 		}
 	}
@@ -222,6 +229,7 @@ public class JsonPathExpectationsHelper {
 	 * and assert that an empty value exists at the given path.
 	 * <p>For the semantics of <em>empty</em>, consult the Javadoc for
 	 * {@link ObjectUtils#isEmpty(Object)}.
+	 *
 	 * @param content the JSON content
 	 */
 	public void assertValueIsEmpty(String content) {
@@ -234,6 +242,7 @@ public class JsonPathExpectationsHelper {
 	 * and assert that a non-empty value exists at the given path.
 	 * <p>For the semantics of <em>empty</em>, consult the Javadoc for
 	 * {@link ObjectUtils#isEmpty(Object)}.
+	 *
 	 * @param content the JSON content
 	 */
 	public void assertValueIsNotEmpty(String content) {
@@ -247,6 +256,7 @@ public class JsonPathExpectationsHelper {
 	 * <p>If the JSON path expression is not
 	 * {@linkplain JsonPath#isDefinite() definite}, this method asserts
 	 * that the list of values at the given path is not <em>empty</em>.
+	 *
 	 * @param content the JSON content
 	 * @since 5.0.3
 	 */
@@ -265,6 +275,7 @@ public class JsonPathExpectationsHelper {
 	 * <p>If the JSON path expression is not
 	 * {@linkplain JsonPath#isDefinite() definite}, this method asserts
 	 * that the list of values at the given path is <em>empty</em>.
+	 *
 	 * @param content the JSON content
 	 * @since 5.0.3
 	 */
@@ -272,14 +283,12 @@ public class JsonPathExpectationsHelper {
 		Object value;
 		try {
 			value = evaluateJsonPath(content);
-		}
-		catch (AssertionError ex) {
+		} catch (AssertionError ex) {
 			return;
 		}
 		if (pathIsIndefinite() && value instanceof List) {
 			AssertionErrors.assertTrue(failureReason("no values", value), ((List<?>) value).isEmpty());
-		}
-		else {
+		} else {
 			AssertionErrors.fail(failureReason("no value", value));
 		}
 	}
@@ -291,6 +300,7 @@ public class JsonPathExpectationsHelper {
 
 	/**
 	 * Evaluate the JSON path and return the resulting value.
+	 *
 	 * @param content the content to evaluate against
 	 * @return the result of the evaluation
 	 * @throws AssertionError if the evaluation fails
@@ -299,8 +309,7 @@ public class JsonPathExpectationsHelper {
 	public Object evaluateJsonPath(String content) {
 		try {
 			return this.jsonPath.read(content);
-		}
-		catch (Throwable ex) {
+		} catch (Throwable ex) {
 			throw new AssertionError("No value at JSON path \"" + this.expression + "\"", ex);
 		}
 	}
@@ -309,6 +318,7 @@ public class JsonPathExpectationsHelper {
 	 * Variant of {@link #evaluateJsonPath(String)} with a target type.
 	 * <p>This can be useful for matching numbers reliably for example coercing an
 	 * integer into a double.
+	 *
 	 * @param content the content to evaluate against
 	 * @return the result of the evaluation
 	 * @throws AssertionError if the evaluation fails
@@ -316,8 +326,7 @@ public class JsonPathExpectationsHelper {
 	public Object evaluateJsonPath(String content, Class<?> targetType) {
 		try {
 			return JsonPath.parse(content).read(this.expression, targetType);
-		}
-		catch (Throwable ex) {
+		} catch (Throwable ex) {
 			String message = "No value at JSON path \"" + this.expression + "\"";
 			throw new AssertionError(message, ex);
 		}

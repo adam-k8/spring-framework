@@ -40,8 +40,8 @@ import org.springframework.util.ConcurrentReferenceHashMap;
  * be searched once, regardless of how many times they are actually used.
  *
  * @author Phillip Webb
- * @since 5.2
  * @see AnnotationTypeMapping
+ * @since 5.2
  */
 final class AnnotationTypeMappings {
 
@@ -60,7 +60,7 @@ final class AnnotationTypeMappings {
 
 
 	private AnnotationTypeMappings(RepeatableContainers repeatableContainers,
-			AnnotationFilter filter, Class<? extends Annotation> annotationType) {
+								   AnnotationFilter filter, Class<? extends Annotation> annotationType) {
 
 		this.repeatableContainers = repeatableContainers;
 		this.filter = filter;
@@ -94,8 +94,7 @@ final class AnnotationTypeMappings {
 					}
 					addIfPossible(queue, source, repeatedAnnotation);
 				}
-			}
-			else {
+			} else {
 				addIfPossible(queue, source, metaAnnotation);
 			}
 		}
@@ -106,12 +105,11 @@ final class AnnotationTypeMappings {
 	}
 
 	private void addIfPossible(Deque<AnnotationTypeMapping> queue, @Nullable AnnotationTypeMapping source,
-			Class<? extends Annotation> annotationType, @Nullable Annotation ann) {
+							   Class<? extends Annotation> annotationType, @Nullable Annotation ann) {
 
 		try {
 			queue.addLast(new AnnotationTypeMapping(source, annotationType, ann));
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			AnnotationUtils.rethrowAnnotationConfigurationException(ex);
 			if (failureLogger.isEnabled()) {
 				failureLogger.log("Failed to introspect meta-annotation " + annotationType.getName(),
@@ -140,6 +138,7 @@ final class AnnotationTypeMappings {
 
 	/**
 	 * Get the total number of contained mappings.
+	 *
 	 * @return the total number of mappings
 	 */
 	int size() {
@@ -150,10 +149,11 @@ final class AnnotationTypeMappings {
 	 * Get an individual mapping from this instance.
 	 * <p>Index {@code 0} will always return the root mapping; higher indexes
 	 * will return meta-annotation mappings.
+	 *
 	 * @param index the index to return
 	 * @return the {@link AnnotationTypeMapping}
 	 * @throws IndexOutOfBoundsException if the index is out of range
-	 * (<tt>index &lt; 0 || index &gt;= size()</tt>)
+	 *                                   (<tt>index &lt; 0 || index &gt;= size()</tt>)
 	 */
 	AnnotationTypeMapping get(int index) {
 		return this.mappings.get(index);
@@ -162,6 +162,7 @@ final class AnnotationTypeMappings {
 
 	/**
 	 * Create {@link AnnotationTypeMappings} for the specified annotation type.
+	 *
 	 * @param annotationType the source annotation type
 	 * @return type mappings for the annotation type
 	 */
@@ -171,9 +172,10 @@ final class AnnotationTypeMappings {
 
 	/**
 	 * Create {@link AnnotationTypeMappings} for the specified annotation type.
-	 * @param annotationType the source annotation type
+	 *
+	 * @param annotationType   the source annotation type
 	 * @param annotationFilter the annotation filter used to limit which
-	 * annotations are considered
+	 *                         annotations are considered
 	 * @return type mappings for the annotation type
 	 */
 	static AnnotationTypeMappings forAnnotationType(
@@ -184,15 +186,16 @@ final class AnnotationTypeMappings {
 
 	/**
 	 * Create {@link AnnotationTypeMappings} for the specified annotation type.
-	 * @param annotationType the source annotation type
+	 *
+	 * @param annotationType       the source annotation type
 	 * @param repeatableContainers the repeatable containers that may be used by
-	 * the meta-annotations
-	 * @param annotationFilter the annotation filter used to limit which
-	 * annotations are considered
+	 *                             the meta-annotations
+	 * @param annotationFilter     the annotation filter used to limit which
+	 *                             annotations are considered
 	 * @return type mappings for the annotation type
 	 */
 	static AnnotationTypeMappings forAnnotationType(Class<? extends Annotation> annotationType,
-			RepeatableContainers repeatableContainers, AnnotationFilter annotationFilter) {
+													RepeatableContainers repeatableContainers, AnnotationFilter annotationFilter) {
 
 		if (repeatableContainers == RepeatableContainers.standardRepeatables()) {
 			return standardRepeatablesCache.computeIfAbsent(annotationFilter,
@@ -224,6 +227,7 @@ final class AnnotationTypeMappings {
 
 		/**
 		 * Create a cache instance with the specified filter.
+		 *
 		 * @param filter the annotation filter
 		 */
 		Cache(RepeatableContainers repeatableContainers, AnnotationFilter filter) {
@@ -234,6 +238,7 @@ final class AnnotationTypeMappings {
 
 		/**
 		 * Get or create {@link AnnotationTypeMappings} for the specified annotation type.
+		 *
 		 * @param annotationType the annotation type
 		 * @return a new or existing {@link AnnotationTypeMappings} instance
 		 */

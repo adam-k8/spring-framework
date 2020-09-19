@@ -39,8 +39,8 @@ import org.springframework.http.ZeroCopyHttpOutputMessage;
  *
  * @author Brian Clozel
  * @author Rossen Stoyanchev
- * @since 5.0
  * @see reactor.netty.http.client.HttpClient
+ * @since 5.0
  */
 class ReactorClientHttpRequest extends AbstractClientHttpRequest implements ZeroCopyHttpOutputMessage {
 
@@ -87,8 +87,7 @@ class ReactorClientHttpRequest extends AbstractClientHttpRequest implements Zero
 				Mono<ByteBuf> byteBufMono = Mono.from(body).map(NettyDataBufferFactory::toByteBuf);
 				return this.outbound.send(byteBufMono).then();
 
-			}
-			else {
+			} else {
 				Flux<ByteBuf> byteBufFlux = Flux.from(body).map(NettyDataBufferFactory::toByteBuf);
 				return this.outbound.send(byteBufFlux).then();
 			}

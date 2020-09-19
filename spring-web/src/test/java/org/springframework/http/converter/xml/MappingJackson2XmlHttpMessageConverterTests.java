@@ -205,7 +205,6 @@ public class MappingJackson2XmlHttpMessageConverterTests {
 	}
 
 
-
 	public static class MyBean {
 
 		private String string;
@@ -270,9 +269,15 @@ public class MappingJackson2XmlHttpMessageConverterTests {
 	}
 
 
-	private interface MyJacksonView1 {};
+	private interface MyJacksonView1 {
+	}
 
-	private interface MyJacksonView2 {};
+	;
+
+	private interface MyJacksonView2 {
+	}
+
+	;
 
 
 	@SuppressWarnings("unused")

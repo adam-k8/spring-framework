@@ -22,11 +22,13 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 /**
  * Unit tests for {@link ReactorNettyRequestUpgradeStrategy}.
+ *
  * @author Rossen Stoyanchev
  */
 public class ReactorNettyRequestUpgradeStrategyTests {
 
-	@Test // gh-25315
+	@Test
+		// gh-25315
 	void defaultWebSocketSpecBuilderIsUniquePerRequest() {
 		ReactorNettyRequestUpgradeStrategy strategy = new ReactorNettyRequestUpgradeStrategy();
 		WebsocketServerSpec spec1 = strategy.buildSpec("p1");

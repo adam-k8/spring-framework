@@ -56,10 +56,9 @@ public class SerializingConverter implements Converter<Object, byte[]> {
 	 */
 	@Override
 	public byte[] convert(Object source) {
-		try  {
+		try {
 			return this.serializer.serializeToByteArray(source);
-		}
-		catch (Throwable ex) {
+		} catch (Throwable ex) {
 			throw new SerializationFailedException("Failed to serialize object using " +
 					this.serializer.getClass().getSimpleName(), ex);
 		}

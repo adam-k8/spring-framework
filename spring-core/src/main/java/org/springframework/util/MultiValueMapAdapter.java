@@ -29,13 +29,13 @@ import org.springframework.lang.Nullable;
 /**
  * Adapts a given {@link Map} to the {@link MultiValueMap} contract.
  *
- * @author Arjen Poutsma
- * @author Juergen Hoeller
- * @since 3.1
  * @param <K> the key type
  * @param <V> the value element type
+ * @author Arjen Poutsma
+ * @author Juergen Hoeller
  * @see CollectionUtils#toMultiValueMap
  * @see LinkedMultiValueMap
+ * @since 3.1
  */
 @SuppressWarnings("serial")
 class MultiValueMapAdapter<K, V> implements MultiValueMap<K, V>, Serializable {

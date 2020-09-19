@@ -57,8 +57,7 @@ public class JsonPathResultMatchersTests {
 			response.addHeader("Content-Type", "application/json");
 			response.getOutputStream().write(RESPONSE_CONTENT.getBytes(StandardCharsets.UTF_8));
 			stubMvcResult = new StubMvcResult(null, null, null, null, null, null, response);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new IllegalStateException(e);
 		}
 	}
@@ -66,15 +65,15 @@ public class JsonPathResultMatchersTests {
 	@Test
 	public void valueWithValueMismatch() throws Exception {
 		assertThatExceptionOfType(AssertionError.class)
-			.isThrownBy(() -> new JsonPathResultMatchers("$.str").value("bogus").match(stubMvcResult))
-			.withMessage("JSON path \"$.str\" expected:<bogus> but was:<foo>");
+				.isThrownBy(() -> new JsonPathResultMatchers("$.str").value("bogus").match(stubMvcResult))
+				.withMessage("JSON path \"$.str\" expected:<bogus> but was:<foo>");
 	}
 
 	@Test
 	public void valueWithTypeMismatch() throws Exception {
 		assertThatExceptionOfType(AssertionError.class)
-			.isThrownBy(() -> new JsonPathResultMatchers("$.str").value("bogus".getBytes()).match(stubMvcResult))
-			.withMessage("At JSON path \"$.str\", value <foo> of type <java.lang.String> cannot be converted to type <byte[]>");
+				.isThrownBy(() -> new JsonPathResultMatchers("$.str").value("bogus".getBytes()).match(stubMvcResult))
+				.withMessage("At JSON path \"$.str\", value <foo> of type <java.lang.String> cannot be converted to type <byte[]>");
 	}
 
 	@Test
@@ -303,7 +302,7 @@ public class JsonPathResultMatchersTests {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		response.addHeader("Content-Type", "application/json");
 		response.getWriter().print(new String("test".getBytes("ISO-8859-1")));
-		StubMvcResult result =  new StubMvcResult(null, null, null, null, null, null, response);
+		StubMvcResult result = new StubMvcResult(null, null, null, null, null, null, response);
 
 		assertThatExceptionOfType(AssertionError.class).isThrownBy(() ->
 				new JsonPathResultMatchers("$.str").prefix("prefix").value("foo").match(result));

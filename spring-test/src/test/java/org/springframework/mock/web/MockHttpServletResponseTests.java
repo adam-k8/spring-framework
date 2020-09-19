@@ -102,7 +102,8 @@ class MockHttpServletResponseTests {
 		assertThat(response.getCharacterEncoding()).isEqualTo("UTF-8");
 	}
 
-	@Test  // SPR-12677
+	@Test
+		// SPR-12677
 	void contentTypeHeaderWithMoreComplexCharsetSyntax() {
 		String contentType = "test/plain;charset=\"utf-8\";foo=\"charset=bar\";foocharset=bar;foo=bar";
 		response.setHeader(CONTENT_TYPE, contentType);
@@ -236,7 +237,8 @@ class MockHttpServletResponseTests {
 		assertThat(response.getContentAsByteArray().length).isEqualTo(1);
 	}
 
-	@Test // SPR-16683
+	@Test
+		// SPR-16683
 	void servletWriterCommittedOnWriterClose() throws IOException {
 		assertThat(response.isCommitted()).isFalse();
 		response.getWriter().write("X");
@@ -246,7 +248,8 @@ class MockHttpServletResponseTests {
 		assertThat(response.getContentAsByteArray().length).isEqualTo(1);
 	}
 
-	@Test  // gh-23219
+	@Test
+		// gh-23219
 	void contentAsUtf8() throws IOException {
 		String content = "Příliš žluťoučký kůň úpěl ďábelské ódy";
 		response.getOutputStream().write(content.getBytes(StandardCharsets.UTF_8));
@@ -317,13 +320,15 @@ class MockHttpServletResponseTests {
 		assertThatIllegalArgumentException().isThrownBy(() -> response.getDateHeader(LAST_MODIFIED));
 	}
 
-	@Test  // SPR-16160
+	@Test
+		// SPR-16160
 	void getNonExistentDateHeader() {
 		assertThat(response.getHeader(LAST_MODIFIED)).isNull();
 		assertThat(response.getDateHeader(LAST_MODIFIED)).isEqualTo(-1);
 	}
 
-	@Test  // SPR-10414
+	@Test
+		// SPR-10414
 	void modifyStatusAfterSendError() throws IOException {
 		response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		response.setStatus(HttpServletResponse.SC_OK);
@@ -458,7 +463,8 @@ class MockHttpServletResponseTests {
 		assertThat(((MockCookie) cookie).getSameSite()).isEqualTo("Lax");
 	}
 
-	@Test  // gh-25501
+	@Test
+		// gh-25501
 	void resetResetsCharset() {
 		assertThat(response.isCharset()).isFalse();
 		response.setCharacterEncoding("UTF-8");

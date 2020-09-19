@@ -44,7 +44,9 @@ import org.springframework.web.cors.CorsUtils;
  */
 public final class RequestMethodsRequestCondition extends AbstractRequestCondition<RequestMethodsRequestCondition> {
 
-	/** Per HTTP method cache to return ready instances from getMatchingCondition. */
+	/**
+	 * Per HTTP method cache to return ready instances from getMatchingCondition.
+	 */
 	private static final Map<String, RequestMethodsRequestCondition> requestMethodConditionCache;
 
 	static {
@@ -60,8 +62,9 @@ public final class RequestMethodsRequestCondition extends AbstractRequestConditi
 
 	/**
 	 * Create a new instance with the given request methods.
+	 *
 	 * @param requestMethods 0 or more HTTP request methods;
-	 * if, 0 the condition will match to every request
+	 *                       if, 0 the condition will match to every request
 	 */
 	public RequestMethodsRequestCondition(RequestMethod... requestMethods) {
 		this.methods = (ObjectUtils.isEmpty(requestMethods) ?
@@ -101,11 +104,9 @@ public final class RequestMethodsRequestCondition extends AbstractRequestConditi
 	public RequestMethodsRequestCondition combine(RequestMethodsRequestCondition other) {
 		if (isEmpty() && other.isEmpty()) {
 			return this;
-		}
-		else if (other.isEmpty()) {
+		} else if (other.isEmpty()) {
 			return this;
-		}
-		else if (isEmpty()) {
+		} else if (isEmpty()) {
 			return other;
 		}
 		Set<RequestMethod> set = new LinkedHashSet<>(this.methods);
@@ -116,6 +117,7 @@ public final class RequestMethodsRequestCondition extends AbstractRequestConditi
 	/**
 	 * Check if any of the HTTP request methods match the given request and
 	 * return an instance that contains the matching HTTP request method only.
+	 *
 	 * @param request the current request
 	 * @return the same instance if the condition is empty (unless the request
 	 * method is HTTP OPTIONS), a new condition with the matched request method,
@@ -166,8 +168,7 @@ public final class RequestMethodsRequestCondition extends AbstractRequestConditi
 			if (requestMethod.equals(RequestMethod.HEAD) && getMethods().contains(RequestMethod.GET)) {
 				return requestMethodConditionCache.get(HttpMethod.GET.name());
 			}
-		}
-		catch (IllegalArgumentException ex) {
+		} catch (IllegalArgumentException ex) {
 			// Custom request method
 		}
 		return null;
@@ -188,12 +189,10 @@ public final class RequestMethodsRequestCondition extends AbstractRequestConditi
 	public int compareTo(RequestMethodsRequestCondition other, HttpServletRequest request) {
 		if (other.methods.size() != this.methods.size()) {
 			return other.methods.size() - this.methods.size();
-		}
-		else if (this.methods.size() == 1) {
+		} else if (this.methods.size() == 1) {
 			if (this.methods.contains(RequestMethod.HEAD) && other.methods.contains(RequestMethod.GET)) {
 				return -1;
-			}
-			else if (this.methods.contains(RequestMethod.GET) && other.methods.contains(RequestMethod.HEAD)) {
+			} else if (this.methods.contains(RequestMethod.GET) && other.methods.contains(RequestMethod.HEAD)) {
 				return 1;
 			}
 		}

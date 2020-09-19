@@ -51,8 +51,8 @@ import org.springframework.util.ObjectUtils;
  * @author Juergen Hoeller
  * @author Stephane Nicoll
  * @author Sam Brannen
- * @since 4.3
  * @see CaffeineCache
+ * @since 4.3
  */
 public class CaffeineCacheManager implements CacheManager {
 
@@ -99,8 +99,7 @@ public class CaffeineCacheManager implements CacheManager {
 				this.cacheMap.put(name, createCaffeineCache(name));
 			}
 			this.dynamic = false;
-		}
-		else {
+		} else {
 			this.dynamic = true;
 		}
 	}
@@ -108,6 +107,7 @@ public class CaffeineCacheManager implements CacheManager {
 	/**
 	 * Set the Caffeine to use for building each individual
 	 * {@link CaffeineCache} instance.
+	 *
 	 * @see #createNativeCaffeineCache
 	 * @see com.github.benmanes.caffeine.cache.Caffeine#build()
 	 */
@@ -119,6 +119,7 @@ public class CaffeineCacheManager implements CacheManager {
 	/**
 	 * Set the {@link CaffeineSpec} to use for building each individual
 	 * {@link CaffeineCache} instance.
+	 *
 	 * @see #createNativeCaffeineCache
 	 * @see com.github.benmanes.caffeine.cache.Caffeine#from(CaffeineSpec)
 	 */
@@ -130,6 +131,7 @@ public class CaffeineCacheManager implements CacheManager {
 	 * Set the Caffeine cache specification String to use for building each
 	 * individual {@link CaffeineCache} instance. The given value needs to
 	 * comply with Caffeine's {@link CaffeineSpec} (see its javadoc).
+	 *
 	 * @see #createNativeCaffeineCache
 	 * @see com.github.benmanes.caffeine.cache.Caffeine#from(String)
 	 */
@@ -147,6 +149,7 @@ public class CaffeineCacheManager implements CacheManager {
 	/**
 	 * Set the Caffeine CacheLoader to use for building each individual
 	 * {@link CaffeineCache} instance, turning it into a LoadingCache.
+	 *
 	 * @see #createNativeCaffeineCache
 	 * @see com.github.benmanes.caffeine.cache.Caffeine#build(CacheLoader)
 	 * @see com.github.benmanes.caffeine.cache.LoadingCache
@@ -204,10 +207,11 @@ public class CaffeineCacheManager implements CacheManager {
 	 * <p>Note that any other caches, whether statically specified through
 	 * {@link #setCacheNames} or dynamically built on demand, still operate
 	 * with the common settings in the cache manager's configuration.
- 	 * @param name the name of the cache
+	 *
+	 * @param name  the name of the cache
 	 * @param cache the custom Caffeine Cache instance to register
-	 * @since 5.2.8
 	 * @see #adaptCaffeineCache
+	 * @since 5.2.8
 	 */
 	public void registerCustomCache(String name, com.github.benmanes.caffeine.cache.Cache<Object, Object> cache) {
 		this.customCacheNames.add(name);
@@ -217,12 +221,13 @@ public class CaffeineCacheManager implements CacheManager {
 	/**
 	 * Adapt the given new native Caffeine Cache instance to Spring's {@link Cache}
 	 * abstraction for the specified cache name.
-	 * @param name the name of the cache
+	 *
+	 * @param name  the name of the cache
 	 * @param cache the native Caffeine Cache instance
 	 * @return the Spring CaffeineCache adapter (or a decorator thereof)
-	 * @since 5.2.8
 	 * @see CaffeineCache
 	 * @see #isAllowNullValues()
+	 * @since 5.2.8
 	 */
 	protected Cache adaptCaffeineCache(String name, com.github.benmanes.caffeine.cache.Cache<Object, Object> cache) {
 		return new CaffeineCache(name, cache, isAllowNullValues());
@@ -234,6 +239,7 @@ public class CaffeineCacheManager implements CacheManager {
 	 * <p>Delegates to {@link #adaptCaffeineCache} as the adaptation method to
 	 * Spring's cache abstraction (allowing for centralized decoration etc),
 	 * passing in a freshly built native Caffeine Cache instance.
+	 *
 	 * @param name the name of the cache
 	 * @return the Spring CaffeineCache adapter (or a decorator thereof)
 	 * @see #adaptCaffeineCache
@@ -246,6 +252,7 @@ public class CaffeineCacheManager implements CacheManager {
 	/**
 	 * Build a common Caffeine Cache instance for the specified cache name,
 	 * using the common Caffeine configuration specified on this cache manager.
+	 *
 	 * @param name the name of the cache
 	 * @return the native Caffeine Cache instance
 	 * @see #createCaffeineCache

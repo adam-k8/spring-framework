@@ -44,8 +44,9 @@ public final class ParamsRequestCondition extends AbstractRequestCondition<Param
 
 	/**
 	 * Create a new instance from the given param expressions.
+	 *
 	 * @param params expressions with syntax defined in {@link RequestMapping#params()};
-	 * 	if 0, the condition will match to every request.
+	 *               if 0, the condition will match to every request.
 	 */
 	public ParamsRequestCondition(String... params) {
 		this.expressions = parseExpressions(params);
@@ -92,11 +93,9 @@ public final class ParamsRequestCondition extends AbstractRequestCondition<Param
 	public ParamsRequestCondition combine(ParamsRequestCondition other) {
 		if (isEmpty() && other.isEmpty()) {
 			return this;
-		}
-		else if (other.isEmpty()) {
+		} else if (other.isEmpty()) {
 			return this;
-		}
-		else if (isEmpty()) {
+		} else if (isEmpty()) {
 			return other;
 		}
 		Set<ParamExpression> set = new LinkedHashSet<>(this.expressions);

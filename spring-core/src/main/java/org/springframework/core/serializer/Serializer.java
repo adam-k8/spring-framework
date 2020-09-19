@@ -23,12 +23,12 @@ import java.io.OutputStream;
 /**
  * A strategy interface for streaming an object to an OutputStream.
  *
+ * @param <T> the object type
  * @author Gary Russell
  * @author Mark Fisher
  * @author Juergen Hoeller
- * @since 3.0.5
- * @param <T> the object type
  * @see Deserializer
+ * @since 3.0.5
  */
 @FunctionalInterface
 public interface Serializer<T> {
@@ -38,7 +38,8 @@ public interface Serializer<T> {
 	 * <p>Note: Implementations should not close the given OutputStream
 	 * (or any decorators of that OutputStream) but rather leave this up
 	 * to the caller.
-	 * @param object the object to serialize
+	 *
+	 * @param object       the object to serialize
 	 * @param outputStream the output stream
 	 * @throws IOException in case of errors writing to the stream
 	 */
@@ -46,6 +47,7 @@ public interface Serializer<T> {
 
 	/**
 	 * Turn an object of type T into a serialized byte array.
+	 *
 	 * @param object the object to serialize
 	 * @return the resulting byte array
 	 * @throws IOException in case of serialization failure

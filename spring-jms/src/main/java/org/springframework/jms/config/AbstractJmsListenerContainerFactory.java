@@ -32,10 +32,10 @@ import org.springframework.util.ErrorHandler;
 /**
  * Base {@link JmsListenerContainerFactory} for Spring's base container implementation.
  *
- * @author Stephane Nicoll
- * @since 4.1
  * @param <C> the container type
+ * @author Stephane Nicoll
  * @see AbstractMessageListenerContainer
+ * @since 4.1
  */
 public abstract class AbstractJmsListenerContainerFactory<C extends AbstractMessageListenerContainer>
 		implements JmsListenerContainerFactory<C> {
@@ -110,8 +110,8 @@ public abstract class AbstractJmsListenerContainerFactory<C extends AbstractMess
 	}
 
 	/**
-	 * @since 5.2.8
 	 * @see AbstractMessageListenerContainer#setExceptionListener(ExceptionListener)
+	 * @since 5.2.8
 	 */
 	public void setExceptionListener(ExceptionListener exceptionListener) {
 		this.exceptionListener = exceptionListener;

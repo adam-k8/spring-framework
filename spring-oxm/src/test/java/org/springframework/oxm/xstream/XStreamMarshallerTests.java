@@ -197,8 +197,7 @@ class XStreamMarshallerTests {
 				Reader reader = new StringReader(writer.toString());
 				byte[] bufResult = (byte[]) marshaller.unmarshal(new StreamSource(reader));
 				assertThat(bufResult).as("Invalid result").isEqualTo(buf);
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				throw new RuntimeException(ex);
 			}
 		});
@@ -276,7 +275,7 @@ class XStreamMarshallerTests {
 	}
 
 	@Test
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	void omitFields() throws Exception {
 		Map omittedFieldsMap = Collections.singletonMap(Flight.class, "flightNumber");
 		marshaller.setOmittedFields(omittedFieldsMap);
@@ -286,7 +285,7 @@ class XStreamMarshallerTests {
 	}
 
 	@Test
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	void implicitCollections() throws Exception {
 		Flights flights = new Flights();
 		flights.getFlights().add(flight);
@@ -351,13 +350,13 @@ class XStreamMarshallerTests {
 	}
 
 
-	private static void assertXpathExists(String xPathExpression, String inXMLString){
+	private static void assertXpathExists(String xPathExpression, String inXMLString) {
 		Source source = Input.fromString(inXMLString).build();
 		Iterable<Node> nodes = new JAXPXPathEngine().selectNodes(xPathExpression, source);
 		assertThat(nodes).as("Expecting to find matches for Xpath " + xPathExpression).hasSizeGreaterThan(0);
 	}
 
-	private static void assertXpathDoesNotExist(String xPathExpression, String inXMLString){
+	private static void assertXpathDoesNotExist(String xPathExpression, String inXMLString) {
 		Source source = Input.fromString(inXMLString).build();
 		Iterable<Node> nodes = new JAXPXPathEngine().selectNodes(xPathExpression, source);
 		assertThat(nodes).as("Should be zero matches for Xpath " + xPathExpression).isEmpty();

@@ -87,6 +87,7 @@ public class WorkManagerTaskExecutor extends JndiLocatorSupport
 	/**
 	 * Specify the CommonJ WorkManager to delegate to.
 	 * <p>Alternatively, you can also specify the JNDI name of the target WorkManager.
+	 *
 	 * @see #setWorkManagerName
 	 */
 	public void setWorkManager(WorkManager workManager) {
@@ -97,6 +98,7 @@ public class WorkManagerTaskExecutor extends JndiLocatorSupport
 	 * Set the JNDI name of the CommonJ WorkManager.
 	 * <p>This can either be a fully qualified JNDI name, or the JNDI name relative
 	 * to the current environment naming context if "resourceRef" is set to "true".
+	 *
 	 * @see #setWorkManager
 	 * @see #setResourceRef
 	 */
@@ -126,6 +128,7 @@ public class WorkManagerTaskExecutor extends JndiLocatorSupport
 	 * In case of {@code #submit} calls, the exposed {@code Runnable} will be a
 	 * {@code FutureTask} which does not propagate any exceptions; you might
 	 * have to cast it and call {@code Future#get} to evaluate exceptions.
+	 *
 	 * @since 4.3
 	 */
 	public void setTaskDecorator(TaskDecorator taskDecorator) {
@@ -158,15 +161,12 @@ public class WorkManagerTaskExecutor extends JndiLocatorSupport
 		try {
 			if (this.workListener != null) {
 				obtainWorkManager().schedule(work, this.workListener);
-			}
-			else {
+			} else {
 				obtainWorkManager().schedule(work);
 			}
-		}
-		catch (WorkRejectedException ex) {
+		} catch (WorkRejectedException ex) {
 			throw new TaskRejectedException("CommonJ WorkManager did not accept task: " + task, ex);
-		}
-		catch (WorkException ex) {
+		} catch (WorkException ex) {
 			throw new SchedulingException("Could not schedule task on CommonJ WorkManager", ex);
 		}
 	}

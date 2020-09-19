@@ -26,9 +26,9 @@ import org.springframework.web.cors.CorsConfiguration;
  *
  * @author Sebastien Deleuze
  * @author Rossen Stoyanchev
- * @since 5.0
  * @see CorsConfiguration
  * @see CorsRegistry
+ * @since 5.0
  */
 public class CorsRegistration {
 

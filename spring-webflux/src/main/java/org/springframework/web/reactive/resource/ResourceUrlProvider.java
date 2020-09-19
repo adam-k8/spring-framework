@@ -94,12 +94,12 @@ public class ResourceUrlProvider implements ApplicationListener<ContextRefreshed
 		AnnotationAwareOrderComparator.sort(mappings);
 
 		mappings.forEach(mapping ->
-			mapping.getHandlerMap().forEach((pattern, handler) -> {
-				if (handler instanceof ResourceWebHandler) {
-					ResourceWebHandler resourceHandler = (ResourceWebHandler) handler;
-					this.handlerMap.put(pattern, resourceHandler);
-				}
-			}));
+				mapping.getHandlerMap().forEach((pattern, handler) -> {
+					if (handler instanceof ResourceWebHandler) {
+						ResourceWebHandler resourceHandler = (ResourceWebHandler) handler;
+						this.handlerMap.put(pattern, resourceHandler);
+					}
+				}));
 
 		if (this.handlerMap.isEmpty()) {
 			logger.trace("No resource handling mappings found");
@@ -111,8 +111,9 @@ public class ResourceUrlProvider implements ApplicationListener<ContextRefreshed
 	 * Get the public resource URL for the given URI string.
 	 * <p>The URI string is expected to be a path and if it contains a query or
 	 * fragment those will be preserved in the resulting public resource URL.
+	 *
 	 * @param uriString the URI string to transform
-	 * @param exchange the current exchange
+	 * @param exchange  the current exchange
 	 * @return the resolved public resource URL path, or empty if unresolved
 	 */
 	public final Mono<String> getForUriString(String uriString, ServerWebExchange exchange) {
@@ -154,7 +155,7 @@ public class ResourceUrlProvider implements ApplicationListener<ContextRefreshed
 					return chain.resolveUrlPath(path.value(), handler.getLocations())
 							.map(resolvedPath -> mapping.value() + resolvedPath);
 				})
-				.orElseGet(() ->{
+				.orElseGet(() -> {
 					if (logger.isTraceEnabled()) {
 						logger.trace(exchange.getLogPrefix() + "No match for \"" + lookupPath + "\"");
 					}
@@ -166,8 +167,7 @@ public class ResourceUrlProvider implements ApplicationListener<ContextRefreshed
 	private static String prependLeadingSlash(String pattern) {
 		if (StringUtils.hasLength(pattern) && !pattern.startsWith("/")) {
 			return "/" + pattern;
-		}
-		else {
+		} else {
 			return pattern;
 		}
 	}

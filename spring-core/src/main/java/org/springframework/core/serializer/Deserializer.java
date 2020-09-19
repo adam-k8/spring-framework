@@ -23,12 +23,12 @@ import java.io.InputStream;
 /**
  * A strategy interface for converting from data in an InputStream to an Object.
  *
+ * @param <T> the object type
  * @author Gary Russell
  * @author Mark Fisher
  * @author Juergen Hoeller
- * @since 3.0.5
- * @param <T> the object type
  * @see Serializer
+ * @since 3.0.5
  */
 @FunctionalInterface
 public interface Deserializer<T> {
@@ -38,6 +38,7 @@ public interface Deserializer<T> {
 	 * <p>Note: Implementations should not close the given InputStream
 	 * (or any decorators of that InputStream) but rather leave this up
 	 * to the caller.
+	 *
 	 * @param inputStream the input stream
 	 * @return the deserialized object
 	 * @throws IOException in case of errors reading from the stream
@@ -46,6 +47,7 @@ public interface Deserializer<T> {
 
 	/**
 	 * Read (assemble) an object of type T from the given byte array.
+	 *
 	 * @param serialized the byte array
 	 * @return the deserialized object
 	 * @throws IOException in case of deserialization failure

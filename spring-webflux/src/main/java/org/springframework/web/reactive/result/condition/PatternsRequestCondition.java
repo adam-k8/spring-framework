@@ -51,6 +51,7 @@ public final class PatternsRequestCondition extends AbstractRequestCondition<Pat
 
 	/**
 	 * Creates a new instance with the given URL patterns.
+	 *
 	 * @param patterns 0 or more URL patterns; if 0 the condition will match to every request.
 	 */
 	public PatternsRequestCondition(PathPattern... patterns) {
@@ -97,14 +98,11 @@ public final class PatternsRequestCondition extends AbstractRequestCondition<Pat
 	public PatternsRequestCondition combine(PatternsRequestCondition other) {
 		if (isEmptyPathPattern() && other.isEmptyPathPattern()) {
 			return this;
-		}
-		else if (other.isEmptyPathPattern()) {
+		} else if (other.isEmptyPathPattern()) {
 			return this;
-		}
-		else if (isEmptyPathPattern()) {
+		} else if (isEmptyPathPattern()) {
 			return other;
-		}
-		else {
+		} else {
 			SortedSet<PathPattern> combined = new TreeSet<>();
 			for (PathPattern pattern1 : this.patterns) {
 				for (PathPattern pattern2 : other.patterns) {
@@ -122,6 +120,7 @@ public final class PatternsRequestCondition extends AbstractRequestCondition<Pat
 	/**
 	 * Checks if any of the patterns match the given request and returns an instance
 	 * that is guaranteed to contain matching patterns, sorted.
+	 *
 	 * @param exchange the current exchange
 	 * @return the same instance if the condition contains no patterns;
 	 * or a new condition with sorted matching patterns;
@@ -169,11 +168,9 @@ public final class PatternsRequestCondition extends AbstractRequestCondition<Pat
 		}
 		if (iterator.hasNext()) {
 			return -1;
-		}
-		else if (iteratorOther.hasNext()) {
+		} else if (iteratorOther.hasNext()) {
 			return 1;
-		}
-		else {
+		} else {
 			return 0;
 		}
 	}

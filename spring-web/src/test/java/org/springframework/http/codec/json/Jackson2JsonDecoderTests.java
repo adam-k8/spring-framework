@@ -205,7 +205,7 @@ public class Jackson2JsonDecoderTests extends AbstractDecoderTests<Jackson2JsonD
 	}
 
 	@Test  // SPR-15975
-	public void  customDeserializer() {
+	public void customDeserializer() {
 		Mono<DataBuffer> input = stringBuffer("{\"test\": 1}");
 
 		testDecode(input, TestObject.class, step -> step
@@ -229,7 +229,8 @@ public class Jackson2JsonDecoderTests extends AbstractDecoderTests<Jackson2JsonD
 	public void decodeNonUtf8Encoding() {
 		Mono<DataBuffer> input = stringBuffer("{\"foo\":\"bar\"}", StandardCharsets.UTF_16);
 
-		testDecode(input, ResolvableType.forType(new ParameterizedTypeReference<Map<String, String>>() {}),
+		testDecode(input, ResolvableType.forType(new ParameterizedTypeReference<Map<String, String>>() {
+				}),
 				step -> step.assertNext(o -> assertThat((Map<String, String>) o).containsEntry("foo", "bar"))
 						.verifyComplete(),
 				MediaType.parseMediaType("application/json; charset=utf-16"),
@@ -243,7 +244,8 @@ public class Jackson2JsonDecoderTests extends AbstractDecoderTests<Jackson2JsonD
 				stringBuffer("{\"føø\":\"bår\"}", StandardCharsets.ISO_8859_1)
 		);
 
-		testDecode(input, ResolvableType.forType(new ParameterizedTypeReference<Map<String, String>>() {}),
+		testDecode(input, ResolvableType.forType(new ParameterizedTypeReference<Map<String, String>>() {
+				}),
 				step -> step.assertNext(o -> assertThat((Map<String, String>) o).containsEntry("føø", "bår"))
 						.verifyComplete(),
 				MediaType.parseMediaType("application/json; charset=iso-8859-1"),
@@ -255,7 +257,8 @@ public class Jackson2JsonDecoderTests extends AbstractDecoderTests<Jackson2JsonD
 	public void decodeMonoNonUtf8Encoding() {
 		Mono<DataBuffer> input = stringBuffer("{\"foo\":\"bar\"}", StandardCharsets.UTF_16);
 
-		testDecodeToMono(input, ResolvableType.forType(new ParameterizedTypeReference<Map<String, String>>() {}),
+		testDecodeToMono(input, ResolvableType.forType(new ParameterizedTypeReference<Map<String, String>>() {
+				}),
 				step -> step.assertNext(o -> assertThat((Map<String, String>) o).containsEntry("foo", "bar"))
 						.verifyComplete(),
 				MediaType.parseMediaType("application/json; charset=utf-16"),
@@ -269,7 +272,8 @@ public class Jackson2JsonDecoderTests extends AbstractDecoderTests<Jackson2JsonD
 				stringBuffer("{\"foo\":\"bar\"}", StandardCharsets.US_ASCII)
 		);
 
-		testDecode(input, ResolvableType.forType(new ParameterizedTypeReference<Map<String, String>>() {}),
+		testDecode(input, ResolvableType.forType(new ParameterizedTypeReference<Map<String, String>>() {
+				}),
 				step -> step.assertNext(o -> assertThat((Map<String, String>) o).containsEntry("foo", "bar"))
 						.verifyComplete(),
 				MediaType.parseMediaType("application/json; charset=us-ascii"),
@@ -321,6 +325,7 @@ public class Jackson2JsonDecoderTests extends AbstractDecoderTests<Jackson2JsonD
 		public int getTest() {
 			return this.test;
 		}
+
 		public void setTest(int test) {
 			this.test = test;
 		}

@@ -191,8 +191,7 @@ final class DefaultRSocketRequesterBuilder implements RSocketRequester.Builder {
 			connectFunction = payload -> new RSocketConnectorHelper().getRSocketMono(
 					this.rsocketConnectorConfigurers, this.rsocketFactoryConfigurers,
 					metaMimeType, dataMimeType, setupPayload, rsocketStrategies, transport, payload);
-		}
-		else {
+		} else {
 			connectFunction = payload -> new RSocketFactoryHelper().getRSocketMono(
 					this.rsocketFactoryConfigurers, metaMimeType, dataMimeType,
 					setupPayload, rsocketStrategies, transport, payload);
@@ -214,8 +213,7 @@ final class DefaultRSocketRequesterBuilder implements RSocketRequester.Builder {
 					this.strategies != null ? this.strategies.mutate() : RSocketStrategies.builder();
 			this.strategiesConfigurers.forEach(c -> c.accept(builder));
 			return builder.build();
-		}
-		else {
+		} else {
 			return this.strategies != null ? this.strategies : RSocketStrategies.builder().build();
 		}
 	}
@@ -294,9 +292,9 @@ final class DefaultRSocketRequesterBuilder implements RSocketRequester.Builder {
 	private static class RSocketConnectorHelper {
 
 		Mono<RSocket> getRSocketMono(List<RSocketConnectorConfigurer> connectorConfigurers,
-				List<ClientRSocketFactoryConfigurer> factoryConfigurers,
-				MimeType metaMimeType, MimeType dataMimeType, Mono<Payload> setupPayload,
-				RSocketStrategies rsocketStrategies, ClientTransport transport, Payload payload) {
+									 List<ClientRSocketFactoryConfigurer> factoryConfigurers,
+									 MimeType metaMimeType, MimeType dataMimeType, Mono<Payload> setupPayload,
+									 RSocketStrategies rsocketStrategies, ClientTransport transport, Payload payload) {
 
 			io.rsocket.core.RSocketConnector connector = io.rsocket.core.RSocketConnector.create();
 			connectorConfigurers.forEach(c -> c.configure(connector));
@@ -326,8 +324,8 @@ final class DefaultRSocketRequesterBuilder implements RSocketRequester.Builder {
 	private static class RSocketFactoryHelper {
 
 		Mono<RSocket> getRSocketMono(List<ClientRSocketFactoryConfigurer> configurers,
-				MimeType metaMimeType, MimeType dataMimeType, Mono<Payload> setupPayload,
-				RSocketStrategies rsocketStrategies, ClientTransport transport, Payload payload) {
+									 MimeType metaMimeType, MimeType dataMimeType, Mono<Payload> setupPayload,
+									 RSocketStrategies rsocketStrategies, ClientTransport transport, Payload payload) {
 
 			io.rsocket.RSocketFactory.ClientRSocketFactory factory = io.rsocket.RSocketFactory.connect();
 			configurers.forEach(c -> c.configure(factory));

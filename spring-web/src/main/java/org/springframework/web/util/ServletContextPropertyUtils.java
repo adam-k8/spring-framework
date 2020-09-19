@@ -31,9 +31,9 @@ import org.springframework.util.SystemPropertyUtils;
  *
  * @author Juergen Hoeller
  * @author Marten Deinum
- * @since 3.2.2
  * @see SystemPropertyUtils
  * @see ServletContext#getInitParameter(String)
+ * @since 3.2.2
  */
 public abstract class ServletContextPropertyUtils {
 
@@ -49,7 +49,8 @@ public abstract class ServletContextPropertyUtils {
 	/**
 	 * Resolve ${...} placeholders in the given text, replacing them with corresponding
 	 * servlet context init parameter or system property values.
-	 * @param text the String to resolve
+	 *
+	 * @param text           the String to resolve
 	 * @param servletContext the servletContext to use for lookups.
 	 * @return the resolved String
 	 * @throws IllegalArgumentException if there is an unresolvable placeholder
@@ -65,8 +66,9 @@ public abstract class ServletContextPropertyUtils {
 	 * Resolve ${...} placeholders in the given text, replacing them with corresponding
 	 * servlet context init parameter or system property values. Unresolvable placeholders
 	 * with no default value are ignored and passed through unchanged if the flag is set to true.
-	 * @param text the String to resolve
-	 * @param servletContext the servletContext to use for lookups.
+	 *
+	 * @param text                           the String to resolve
+	 * @param servletContext                 the servletContext to use for lookups.
 	 * @param ignoreUnresolvablePlaceholders flag to determine is unresolved placeholders are ignored
 	 * @return the resolved String
 	 * @throws IllegalArgumentException if there is an unresolvable placeholder and the flag is false
@@ -110,8 +112,7 @@ public abstract class ServletContextPropertyUtils {
 					}
 				}
 				return propVal;
-			}
-			catch (Throwable ex) {
+			} catch (Throwable ex) {
 				System.err.println("Could not resolve placeholder '" + placeholderName + "' in [" +
 						this.text + "] as ServletContext init-parameter or system property: " + ex);
 				return null;

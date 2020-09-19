@@ -35,8 +35,8 @@ import org.springframework.util.Assert;
  *
  * @author Juergen Hoeller
  * @author Stephane Nicoll
- * @since 3.2
  * @see JCacheCache
+ * @since 3.2
  */
 public class JCacheCacheManager extends AbstractTransactionSupportingCacheManager {
 
@@ -58,6 +58,7 @@ public class JCacheCacheManager extends AbstractTransactionSupportingCacheManage
 	/**
 	 * Create a new {@code JCacheCacheManager} for the given backing JCache
 	 * {@link CacheManager javax.cache.CacheManager}.
+	 *
 	 * @param cacheManager the backing JCache {@code javax.cache.CacheManager}
 	 */
 	public JCacheCacheManager(CacheManager cacheManager) {
