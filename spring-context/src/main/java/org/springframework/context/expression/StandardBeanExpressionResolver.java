@@ -46,18 +46,22 @@ import org.springframework.util.StringUtils;
  * beans such as "environment", "systemProperties" and "systemEnvironment".
  *
  * @author Juergen Hoeller
- * @since 3.0
  * @see BeanExpressionContext#getBeanFactory()
  * @see org.springframework.expression.ExpressionParser
  * @see org.springframework.expression.spel.standard.SpelExpressionParser
  * @see org.springframework.expression.spel.support.StandardEvaluationContext
+ * @since 3.0
  */
 public class StandardBeanExpressionResolver implements BeanExpressionResolver {
 
-	/** Default expression prefix: "#{". */
+	/**
+	 * Default expression prefix: "#{".
+	 */
 	public static final String DEFAULT_EXPRESSION_PREFIX = "#{";
 
-	/** Default expression suffix: "}". */
+	/**
+	 * Default expression suffix: "}".
+	 */
 	public static final String DEFAULT_EXPRESSION_SUFFIX = "}";
 
 
@@ -76,10 +80,12 @@ public class StandardBeanExpressionResolver implements BeanExpressionResolver {
 		public boolean isTemplate() {
 			return true;
 		}
+
 		@Override
 		public String getExpressionPrefix() {
 			return expressionPrefix;
 		}
+
 		@Override
 		public String getExpressionSuffix() {
 			return expressionSuffix;
@@ -97,6 +103,7 @@ public class StandardBeanExpressionResolver implements BeanExpressionResolver {
 	/**
 	 * Create a new {@code StandardBeanExpressionResolver} with the given bean class loader,
 	 * using it as the basis for expression compilation.
+	 *
 	 * @param beanClassLoader the factory's bean class loader
 	 */
 	public StandardBeanExpressionResolver(@Nullable ClassLoader beanClassLoader) {
@@ -107,6 +114,7 @@ public class StandardBeanExpressionResolver implements BeanExpressionResolver {
 	/**
 	 * Set the prefix that an expression string starts with.
 	 * The default is "#{".
+	 *
 	 * @see #DEFAULT_EXPRESSION_PREFIX
 	 */
 	public void setExpressionPrefix(String expressionPrefix) {
@@ -117,6 +125,7 @@ public class StandardBeanExpressionResolver implements BeanExpressionResolver {
 	/**
 	 * Set the suffix that an expression string ends with.
 	 * The default is "}".
+	 *
 	 * @see #DEFAULT_EXPRESSION_SUFFIX
 	 */
 	public void setExpressionSuffix(String expressionSuffix) {
@@ -164,8 +173,7 @@ public class StandardBeanExpressionResolver implements BeanExpressionResolver {
 				this.evaluationCache.put(evalContext, sec);
 			}
 			return expr.getValue(sec);
-		}
-		catch (Throwable ex) {
+		} catch (Throwable ex) {
 			throw new BeanExpressionException("Expression parsing failed", ex);
 		}
 	}

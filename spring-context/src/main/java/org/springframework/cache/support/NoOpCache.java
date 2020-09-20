@@ -29,8 +29,8 @@ import org.springframework.util.Assert;
  *
  * @author Costin Leau
  * @author Stephane Nicoll
- * @since 4.3.4
  * @see NoOpCacheManager
+ * @since 4.3.4
  */
 public class NoOpCache implements Cache {
 
@@ -39,6 +39,7 @@ public class NoOpCache implements Cache {
 
 	/**
 	 * Create a {@link NoOpCache} instance with the specified name.
+	 *
 	 * @param name the name of the cache
 	 */
 	public NoOpCache(String name) {
@@ -74,8 +75,7 @@ public class NoOpCache implements Cache {
 	public <T> T get(Object key, Callable<T> valueLoader) {
 		try {
 			return valueLoader.call();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			throw new ValueRetrievalException(key, valueLoader, ex);
 		}
 	}

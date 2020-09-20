@@ -36,8 +36,8 @@ import org.springframework.lang.Nullable;
  * happens in the base class {@link ConcurrentTaskExecutor} itself.
  *
  * @author Juergen Hoeller
- * @since 4.0
  * @see javax.enterprise.concurrent.ManagedExecutorService
+ * @since 4.0
  */
 public class DefaultManagedTaskExecutor extends ConcurrentTaskExecutor implements InitializingBean {
 
@@ -49,6 +49,7 @@ public class DefaultManagedTaskExecutor extends ConcurrentTaskExecutor implement
 
 	/**
 	 * Set the JNDI template to use for JNDI lookups.
+	 *
 	 * @see org.springframework.jndi.JndiAccessor#setJndiTemplate
 	 */
 	public void setJndiTemplate(JndiTemplate jndiTemplate) {
@@ -57,6 +58,7 @@ public class DefaultManagedTaskExecutor extends ConcurrentTaskExecutor implement
 
 	/**
 	 * Set the JNDI environment to use for JNDI lookups.
+	 *
 	 * @see org.springframework.jndi.JndiAccessor#setJndiEnvironment
 	 */
 	public void setJndiEnvironment(Properties jndiEnvironment) {
@@ -67,6 +69,7 @@ public class DefaultManagedTaskExecutor extends ConcurrentTaskExecutor implement
 	 * Set whether the lookup occurs in a Java EE container, i.e. if the prefix
 	 * "java:comp/env/" needs to be added if the JNDI name doesn't already
 	 * contain it. PersistenceAnnotationBeanPostProcessor's default is "true".
+	 *
 	 * @see org.springframework.jndi.JndiLocatorSupport#setResourceRef
 	 */
 	public void setResourceRef(boolean resourceRef) {
@@ -78,6 +81,7 @@ public class DefaultManagedTaskExecutor extends ConcurrentTaskExecutor implement
 	 * replacing the default JNDI name "java:comp/DefaultManagedExecutorService".
 	 * <p>This can either be a fully qualified JNDI name, or the JNDI name relative
 	 * to the current environment naming context if "resourceRef" is set to "true".
+	 *
 	 * @see #setConcurrentExecutor
 	 * @see #setResourceRef
 	 */
