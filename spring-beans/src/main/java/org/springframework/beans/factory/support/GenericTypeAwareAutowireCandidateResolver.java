@@ -182,14 +182,14 @@ public class GenericTypeAwareAutowireCandidateResolver extends SimpleAutowireCan
 	 * This implementation clones all instance fields through standard
 	 * {@link Cloneable} support, allowing for subsequent reconfiguration
 	 * of the cloned instance through a fresh {@link #setBeanFactory} call.
+	 *
 	 * @see #clone()
 	 */
 	@Override
 	public AutowireCandidateResolver cloneIfNecessary() {
 		try {
 			return (AutowireCandidateResolver) clone();
-		}
-		catch (CloneNotSupportedException ex) {
+		} catch (CloneNotSupportedException ex) {
 			throw new IllegalStateException(ex);
 		}
 	}

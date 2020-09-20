@@ -32,6 +32,7 @@ public class SimpleAutowireCandidateResolver implements AutowireCandidateResolve
 
 	/**
 	 * Shared instance of {@code SimpleAutowireCandidateResolver}.
+	 *
 	 * @since 5.2.7
 	 */
 	public static final SimpleAutowireCandidateResolver INSTANCE = new SimpleAutowireCandidateResolver();
@@ -66,6 +67,7 @@ public class SimpleAutowireCandidateResolver implements AutowireCandidateResolve
 
 	/**
 	 * This implementation returns {@code this} as-is.
+	 *
 	 * @see #INSTANCE
 	 */
 	@Override
