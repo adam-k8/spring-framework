@@ -149,10 +149,15 @@ class ConditionEvaluator {
 		public ConditionContextImpl(@Nullable BeanDefinitionRegistry registry,
 									@Nullable Environment environment, @Nullable ResourceLoader resourceLoader) {
 
+			//ioc 容器applicationContext对象
 			this.registry = registry;
+			//bean工厂对象
 			this.beanFactory = deduceBeanFactory(registry);
+			//设置环境对象
 			this.environment = (environment != null ? environment : deduceEnvironment(registry));
+			//资源加载对象
 			this.resourceLoader = (resourceLoader != null ? resourceLoader : deduceResourceLoader(registry));
+			//类加载器对象
 			this.classLoader = deduceClassLoader(resourceLoader, this.beanFactory);
 		}
 

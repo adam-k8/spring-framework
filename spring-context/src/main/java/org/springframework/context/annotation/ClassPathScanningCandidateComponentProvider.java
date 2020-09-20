@@ -89,7 +89,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
 
 
-	protected final Log logger = LogFactory.getLog(getClass());
+ 	protected final Log logger = LogFactory.getLog(getClass());
 
 	private String resourcePattern = DEFAULT_RESOURCE_PATTERN;
 
