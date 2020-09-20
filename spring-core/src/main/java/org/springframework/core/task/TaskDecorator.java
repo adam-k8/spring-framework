@@ -33,10 +33,10 @@ package org.springframework.core.task;
  * any exceptions from its {@code run} method.
  *
  * @author Juergen Hoeller
- * @since 4.3
  * @see TaskExecutor#execute(Runnable)
  * @see SimpleAsyncTaskExecutor#setTaskDecorator
  * @see org.springframework.core.task.support.TaskExecutorAdapter#setTaskDecorator
+ * @since 4.3
  */
 @FunctionalInterface
 public interface TaskDecorator {
@@ -45,6 +45,7 @@ public interface TaskDecorator {
 	 * Decorate the given {@code Runnable}, returning a potentially wrapped
 	 * {@code Runnable} for actual execution, internally delegating to the
 	 * original {@link Runnable#run()} implementation.
+	 *
 	 * @param runnable the original {@code Runnable}
 	 * @return the decorated {@code Runnable}
 	 */

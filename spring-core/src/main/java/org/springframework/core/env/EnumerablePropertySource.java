@@ -37,16 +37,17 @@ import org.springframework.util.ObjectUtils;
  * (via {@link #getProperty(String)}) in order to evaluate whether it is present
  * or not.
  *
+ * @param <T> the source type
  * @author Chris Beams
  * @author Juergen Hoeller
  * @since 3.1
- * @param <T> the source type
  */
 public abstract class EnumerablePropertySource<T> extends PropertySource<T> {
 
 	/**
 	 * Create a new {@code EnumerablePropertySource} with the given name and source object.
-	 * @param name the associated name
+	 *
+	 * @param name   the associated name
 	 * @param source the source object
 	 */
 	public EnumerablePropertySource(String name, T source) {
@@ -56,6 +57,7 @@ public abstract class EnumerablePropertySource<T> extends PropertySource<T> {
 	/**
 	 * Create a new {@code EnumerablePropertySource} with the given name and with a new
 	 * {@code Object} instance as the underlying source.
+	 *
 	 * @param name the associated name
 	 */
 	protected EnumerablePropertySource(String name) {
@@ -67,6 +69,7 @@ public abstract class EnumerablePropertySource<T> extends PropertySource<T> {
 	 * Return whether this {@code PropertySource} contains a property with the given name.
 	 * <p>This implementation checks for the presence of the given name within the
 	 * {@link #getPropertyNames()} array.
+	 *
 	 * @param name the name of the property to find
 	 */
 	@Override
