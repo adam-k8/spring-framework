@@ -191,13 +191,11 @@ class UndertowServerHttpRequest extends AbstractServerHttpRequest {
 					DataBuffer dataBuffer = this.bufferFactory.wrap(byteBuffer);
 					release = false;
 					return new UndertowDataBuffer(dataBuffer, pooledByteBuffer);
-				}
-				else if (read == -1) {
+				} else if (read == -1) {
 					onAllDataRead();
 				}
 				return null;
-			}
-			finally {
+			} finally {
 				if (release && pooledByteBuffer.isOpen()) {
 					pooledByteBuffer.close();
 				}
@@ -225,7 +223,7 @@ class UndertowServerHttpRequest extends AbstractServerHttpRequest {
 		}
 
 		private UndertowDataBuffer(DataBuffer dataBuffer, PooledByteBuffer pooledByteBuffer,
-				AtomicInteger refCount) {
+								   AtomicInteger refCount) {
 			super(dataBuffer);
 			this.refCount = refCount;
 			this.pooledByteBuffer = pooledByteBuffer;
@@ -249,8 +247,7 @@ class UndertowServerHttpRequest extends AbstractServerHttpRequest {
 			if (refCount == 0) {
 				try {
 					return DataBufferUtils.release(dataBuffer());
-				}
-				finally {
+				} finally {
 					this.pooledByteBuffer.close();
 				}
 			}

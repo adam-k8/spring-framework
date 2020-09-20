@@ -43,8 +43,8 @@ import org.springframework.util.MultiValueMap;
  *
  * @author Brian Clozel
  * @author Rossen Stoyanchev
- * @since 5.0
  * @see reactor.netty.http.client.HttpClient
+ * @since 5.0
  */
 class ReactorClientHttpResponse implements ClientHttpResponse {
 
@@ -65,6 +65,7 @@ class ReactorClientHttpResponse implements ClientHttpResponse {
 	/**
 	 * Constructor that matches the inputs from
 	 * {@link reactor.netty.http.client.HttpClient.ResponseReceiver#responseConnection(BiFunction)}.
+	 *
 	 * @since 5.2.8
 	 */
 	public ReactorClientHttpResponse(HttpClientResponse response, Connection connection) {
@@ -76,6 +77,7 @@ class ReactorClientHttpResponse implements ClientHttpResponse {
 
 	/**
 	 * Constructor with inputs extracted from a {@link Connection}.
+	 *
 	 * @deprecated as of 5.2.8, in favor of {@link #ReactorClientHttpResponse(HttpClientResponse, Connection)}
 	 */
 	@Deprecated
@@ -128,13 +130,13 @@ class ReactorClientHttpResponse implements ClientHttpResponse {
 		this.response.cookies().values().stream().flatMap(Collection::stream)
 				.forEach(c ->
 
-					result.add(c.name(), ResponseCookie.fromClientResponse(c.name(), c.value())
-							.domain(c.domain())
-							.path(c.path())
-							.maxAge(c.maxAge())
-							.secure(c.isSecure())
-							.httpOnly(c.isHttpOnly())
-							.build()));
+						result.add(c.name(), ResponseCookie.fromClientResponse(c.name(), c.value())
+								.domain(c.domain())
+								.path(c.path())
+								.maxAge(c.maxAge())
+								.secure(c.isSecure())
+								.httpOnly(c.isHttpOnly())
+								.build()));
 		return CollectionUtils.unmodifiableMultiValueMap(result);
 	}
 
@@ -150,7 +152,10 @@ class ReactorClientHttpResponse implements ClientHttpResponse {
 			if (logger.isDebugEnabled()) {
 				logger.debug(this.logPrefix + "Releasing body, not yet subscribed.");
 			}
-			this.inbound.receive().doOnNext(byteBuf -> {}).subscribe(byteBuf -> {}, ex -> {});
+			this.inbound.receive().doOnNext(byteBuf -> {
+			}).subscribe(byteBuf -> {
+			}, ex -> {
+			});
 		}
 	}
 

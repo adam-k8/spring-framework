@@ -105,8 +105,7 @@ final class DefaultWebClientBuilder implements WebClient.Builder {
 		if (other.defaultHeaders != null) {
 			this.defaultHeaders = new HttpHeaders();
 			this.defaultHeaders.putAll(other.defaultHeaders);
-		}
-		else {
+		} else {
 			this.defaultHeaders = null;
 		}
 
@@ -272,11 +271,9 @@ final class DefaultWebClientBuilder implements WebClient.Builder {
 	private ClientHttpConnector getOrInitConnector() {
 		if (this.connector != null) {
 			return this.connector;
-		}
-		else if (reactorClientPresent) {
+		} else if (reactorClientPresent) {
 			return new ReactorClientHttpConnector();
-		}
-		else if (jettyClientPresent) {
+		} else if (jettyClientPresent) {
 			return new JettyClientHttpConnector();
 		}
 		throw new IllegalStateException("No suitable default ClientHttpConnector found");

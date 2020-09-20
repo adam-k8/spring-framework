@@ -52,8 +52,9 @@ public final class HeadersRequestCondition extends AbstractRequestCondition<Head
 	 * Create a new instance from the given header expressions. Expressions with
 	 * header names 'Accept' or 'Content-Type' are ignored. See {@link ConsumesRequestCondition}
 	 * and {@link ProducesRequestCondition} for those.
+	 *
 	 * @param headers media type expressions with syntax defined in {@link RequestMapping#headers()};
-	 * if 0, the condition will match to every request
+	 *                if 0, the condition will match to every request
 	 */
 	public HeadersRequestCondition(String... headers) {
 		this.expressions = parseExpressions(headers);
@@ -104,11 +105,9 @@ public final class HeadersRequestCondition extends AbstractRequestCondition<Head
 	public HeadersRequestCondition combine(HeadersRequestCondition other) {
 		if (isEmpty() && other.isEmpty()) {
 			return this;
-		}
-		else if (other.isEmpty()) {
+		} else if (other.isEmpty()) {
 			return this;
-		}
-		else if (isEmpty()) {
+		} else if (isEmpty()) {
 			return other;
 		}
 		Set<HeaderExpression> set = new LinkedHashSet<>(this.expressions);

@@ -173,7 +173,8 @@ class WebClientIntegrationTests {
 		Mono<ValueContainer<Pojo>> result = this.webClient.get()
 				.uri("/json").accept(MediaType.APPLICATION_JSON)
 				.retrieve()
-				.bodyToMono(new ParameterizedTypeReference<ValueContainer<Pojo>>() {});
+				.bodyToMono(new ParameterizedTypeReference<ValueContainer<Pojo>>() {
+				});
 
 		StepVerifier.create(result)
 				.assertNext(c -> assertThat(c.getContainerValue()).isEqualTo(new Pojo("foofoo", "barbar")))
@@ -301,7 +302,8 @@ class WebClientIntegrationTests {
 		});
 	}
 
-	@Test // gh-24788
+	@Test
+		// gh-24788
 	void retrieveJsonArrayAsBodilessEntityShouldReleasesConnection() {
 
 		// Constrain connection pool and make consecutive requests.
@@ -316,7 +318,7 @@ class WebClientIntegrationTests {
 				.baseUrl(this.server.url("/").toString())
 				.build();
 
-		for (int i=1 ; i <= 2; i++) {
+		for (int i = 1; i <= 2; i++) {
 
 			// Response must be large enough to circumvent eager prefetching
 
@@ -393,7 +395,8 @@ class WebClientIntegrationTests {
 		StepVerifier.create(result).verifyComplete();
 	}
 
-	@ParameterizedWebClientTest  // SPR-15946
+	@ParameterizedWebClientTest
+		// SPR-15946
 	void retrieve404(ClientHttpConnector connector) {
 		startServer(connector);
 
@@ -564,7 +567,7 @@ class WebClientIntegrationTests {
 				.expectErrorSatisfies(throwable -> {
 					assertThat(throwable instanceof UnknownHttpStatusCodeException).isTrue();
 					UnknownHttpStatusCodeException ex = (UnknownHttpStatusCodeException) throwable;
-					assertThat(ex.getMessage()).isEqualTo(("Unknown status code ["+errorStatus+"]"));
+					assertThat(ex.getMessage()).isEqualTo(("Unknown status code [" + errorStatus + "]"));
 					assertThat(ex.getRawStatusCode()).isEqualTo(errorStatus);
 					assertThat(ex.getStatusText()).isEqualTo("");
 					assertThat(ex.getHeaders().getContentType()).isEqualTo(MediaType.TEXT_PLAIN);
@@ -609,11 +612,13 @@ class WebClientIntegrationTests {
 		});
 	}
 
-	@ParameterizedWebClientTest  // SPR-16246
+	@ParameterizedWebClientTest
+		// SPR-16246
 	void postLargeTextFile(ClientHttpConnector connector) throws Exception {
 		startServer(connector);
 
-		prepareResponse(response -> {});
+		prepareResponse(response -> {
+		});
 
 		Resource resource = new ClassPathResource("largeTextFile.txt", getClass());
 		Flux<DataBuffer> body = DataBufferUtils.read(resource, new DefaultDataBufferFactory(), 4096);
@@ -635,8 +640,7 @@ class WebClientIntegrationTests {
 				String actual = bos.toString("UTF-8");
 				String expected = new String(Files.readAllBytes(resource.getFile().toPath()), StandardCharsets.UTF_8);
 				assertThat(actual).isEqualTo(expected);
-			}
-			catch (IOException ex) {
+			} catch (IOException ex) {
 				throw new UncheckedIOException(ex);
 			}
 		});
@@ -677,7 +681,8 @@ class WebClientIntegrationTests {
 				.uri("/greeting")
 				.retrieve()
 				.onStatus(HttpStatus::is5xxServerError, response -> Mono.just(new MyException("500 error!")))
-				.bodyToMono(new ParameterizedTypeReference<String>() {});
+				.bodyToMono(new ParameterizedTypeReference<String>() {
+				});
 
 		StepVerifier.create(result)
 				.expectError(MyException.class)
@@ -994,7 +999,8 @@ class WebClientIntegrationTests {
 		});
 	}
 
-	@ParameterizedWebClientTest  // SPR-15782
+	@ParameterizedWebClientTest
+		// SPR-15782
 	void exchangeWithRelativeUrl(ClientHttpConnector connector) {
 		startServer(connector);
 
@@ -1089,8 +1095,7 @@ class WebClientIntegrationTests {
 	private void expectRequest(Consumer<RecordedRequest> consumer) {
 		try {
 			consumer.accept(this.server.takeRequest());
-		}
-		catch (InterruptedException ex) {
+		} catch (InterruptedException ex) {
 			throw new IllegalStateException(ex);
 		}
 	}

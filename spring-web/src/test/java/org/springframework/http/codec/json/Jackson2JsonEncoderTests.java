@@ -93,10 +93,10 @@ public class Jackson2JsonEncoderTests extends AbstractEncoderTests<Jackson2JsonE
 				new Pojo("foofoofoo", "barbarbar"));
 
 		testEncodeAll(input, ResolvableType.forClass(Pojo.class), step -> step
-				.consumeNextWith(expectString("{\"foo\":\"foo\",\"bar\":\"bar\"}\n"))
-				.consumeNextWith(expectString("{\"foo\":\"foofoo\",\"bar\":\"barbar\"}\n"))
-				.consumeNextWith(expectString("{\"foo\":\"foofoofoo\",\"bar\":\"barbarbar\"}\n"))
-				.verifyComplete(),
+						.consumeNextWith(expectString("{\"foo\":\"foo\",\"bar\":\"bar\"}\n"))
+						.consumeNextWith(expectString("{\"foo\":\"foofoo\",\"bar\":\"barbar\"}\n"))
+						.consumeNextWith(expectString("{\"foo\":\"foofoofoo\",\"bar\":\"barbarbar\"}\n"))
+						.verifyComplete(),
 				APPLICATION_STREAM_JSON, null);
 	}
 
@@ -166,13 +166,13 @@ public class Jackson2JsonEncoderTests extends AbstractEncoderTests<Jackson2JsonE
 		);
 
 		testEncode(input, ResolvableType.forClass(Pojo.class), step -> step
-				.consumeNextWith(expectString("{\"foo\":\"foo\",\"bar\":\"bar\"}\n")
-						.andThen(DataBufferUtils::release))
-				.consumeNextWith(expectString("{\"foo\":\"foofoo\",\"bar\":\"barbar\"}\n")
-						.andThen(DataBufferUtils::release))
-				.consumeNextWith(expectString("{\"foo\":\"foofoofoo\",\"bar\":\"barbarbar\"}\n")
-						.andThen(DataBufferUtils::release))
-				.verifyComplete(),
+						.consumeNextWith(expectString("{\"foo\":\"foo\",\"bar\":\"bar\"}\n")
+								.andThen(DataBufferUtils::release))
+						.consumeNextWith(expectString("{\"foo\":\"foofoo\",\"bar\":\"barbar\"}\n")
+								.andThen(DataBufferUtils::release))
+						.consumeNextWith(expectString("{\"foo\":\"foofoofoo\",\"bar\":\"barbarbar\"}\n")
+								.andThen(DataBufferUtils::release))
+						.verifyComplete(),
 				barMediaType, null);
 	}
 
@@ -232,8 +232,8 @@ public class Jackson2JsonEncoderTests extends AbstractEncoderTests<Jackson2JsonE
 		Mono<Object> input = Mono.just(new Pojo("foo", "bar"));
 
 		testEncode(input, ResolvableType.forClass(Pojo.class), step -> step
-				.consumeNextWith(expectString("{\"foo\":\"foo\",\"bar\":\"bar\"}"))
-				.verifyComplete(),
+						.consumeNextWith(expectString("{\"foo\":\"foo\",\"bar\":\"bar\"}"))
+						.verifyComplete(),
 				new MimeType("application", "json", StandardCharsets.US_ASCII), null);
 
 	}

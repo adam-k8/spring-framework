@@ -37,10 +37,10 @@ import org.springframework.util.CollectionUtils;
  *
  * @author Arjen Poutsma
  * @author Juergen Hoeller
- * @since 3.0
  * @see ClientHttpRequestInterceptor
  * @see InterceptingClientHttpRequestFactory
  * @see org.springframework.web.client.RestTemplate
+ * @since 3.0
  */
 public abstract class InterceptingHttpAccessor extends HttpAccessor {
 
@@ -54,6 +54,7 @@ public abstract class InterceptingHttpAccessor extends HttpAccessor {
 	 * Set the request interceptors that this accessor should use.
 	 * <p>The interceptors will get immediately sorted according to their
 	 * {@linkplain AnnotationAwareOrderComparator#sort(List) order}.
+	 *
 	 * @see #getRequestFactory()
 	 * @see AnnotationAwareOrderComparator
 	 */
@@ -90,6 +91,7 @@ public abstract class InterceptingHttpAccessor extends HttpAccessor {
 	/**
 	 * Overridden to expose an {@link InterceptingClientHttpRequestFactory}
 	 * if necessary.
+	 *
 	 * @see #getInterceptors()
 	 */
 	@Override
@@ -102,8 +104,7 @@ public abstract class InterceptingHttpAccessor extends HttpAccessor {
 				this.interceptingRequestFactory = factory;
 			}
 			return factory;
-		}
-		else {
+		} else {
 			return super.getRequestFactory();
 		}
 	}
