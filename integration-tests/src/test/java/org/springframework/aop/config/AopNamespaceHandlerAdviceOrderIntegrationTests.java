@@ -35,8 +35,8 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
  * AOP namespace.
  *
  * @author Sam Brannen
- * @since 5.2.7
  * @see org.springframework.aop.framework.autoproxy.AspectJAutoProxyAdviceOrderIntegrationTests
+ * @since 5.2.7
  */
 class AopNamespaceHandlerAdviceOrderIntegrationTests {
 
@@ -93,8 +93,7 @@ class AopNamespaceHandlerAdviceOrderIntegrationTests {
 			invocations.add("around - start");
 			try {
 				return joinPoint.proceed();
-			}
-			finally {
+			} finally {
 				invocations.add("around - end");
 			}
 		}
