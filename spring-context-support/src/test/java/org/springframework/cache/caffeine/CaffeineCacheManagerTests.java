@@ -193,7 +193,7 @@ public class CaffeineCacheManagerTests {
 		assertThat(value.get()).isEqualTo("pong");
 
 		assertThatIllegalArgumentException().isThrownBy(() -> assertThat(cache1.get("foo")).isNull())
-			.withMessageContaining("I only know ping");
+				.withMessageContaining("I only know ping");
 	}
 
 	@Test

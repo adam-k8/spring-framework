@@ -34,8 +34,8 @@ import org.springframework.util.Assert;
  * @author Ben Manes
  * @author Juergen Hoeller
  * @author Stephane Nicoll
- * @since 4.3
  * @see CaffeineCacheManager
+ * @since 4.3
  */
 public class CaffeineCache extends AbstractValueAdaptingCache {
 
@@ -47,7 +47,8 @@ public class CaffeineCache extends AbstractValueAdaptingCache {
 	/**
 	 * Create a {@link CaffeineCache} instance with the specified name and the
 	 * given internal {@link com.github.benmanes.caffeine.cache.Cache} to use.
-	 * @param name the name of the cache
+	 *
+	 * @param name  the name of the cache
 	 * @param cache the backing Caffeine Cache instance
 	 */
 	public CaffeineCache(String name, com.github.benmanes.caffeine.cache.Cache<Object, Object> cache) {
@@ -57,13 +58,14 @@ public class CaffeineCache extends AbstractValueAdaptingCache {
 	/**
 	 * Create a {@link CaffeineCache} instance with the specified name and the
 	 * given internal {@link com.github.benmanes.caffeine.cache.Cache} to use.
-	 * @param name the name of the cache
-	 * @param cache the backing Caffeine Cache instance
+	 *
+	 * @param name            the name of the cache
+	 * @param cache           the backing Caffeine Cache instance
 	 * @param allowNullValues whether to accept and convert {@code null}
-	 * values for this cache
+	 *                        values for this cache
 	 */
 	public CaffeineCache(String name, com.github.benmanes.caffeine.cache.Cache<Object, Object> cache,
-			boolean allowNullValues) {
+						 boolean allowNullValues) {
 
 		super(allowNullValues);
 		Assert.notNull(name, "Name must not be null");
@@ -173,8 +175,7 @@ public class CaffeineCache extends AbstractValueAdaptingCache {
 		public Object apply(Object o) {
 			try {
 				return toStoreValue(this.valueLoader.call());
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				throw new ValueRetrievalException(o, this.valueLoader, ex);
 			}
 		}
