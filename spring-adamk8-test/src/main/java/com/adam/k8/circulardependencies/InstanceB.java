@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class InstanceB {
 
-
 	@Autowired
 	private InstanceA instanceA;
 
@@ -19,7 +18,6 @@ public class InstanceB {
 		return instanceA;
 	}
 
-
 	public void setInstanceA(InstanceA instanceA) {
 		this.instanceA = instanceA;
 	}
@@ -27,7 +25,6 @@ public class InstanceB {
 	public InstanceB(InstanceA instanceA) {
 		this.instanceA = instanceA;
 	}
-
 
 	public InstanceB() {
 		System.out.println("InstanceB实例化");

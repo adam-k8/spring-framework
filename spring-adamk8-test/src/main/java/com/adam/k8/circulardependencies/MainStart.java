@@ -2,9 +2,11 @@ package com.adam.k8.circulardependencies;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.RootBeanDefinition;
 
 import java.lang.reflect.Field;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,128 +16,128 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Slogan 致敬大师，致敬未来的你
  */
 public class MainStart {
-
-	public static void main(String[] args) throws Exception {
-
-		// 已经加载循环依赖
-		String beanName = "com.adam.k8.circulardependencies.InstanceA";
-
-		getBean(beanName);
-
-		//ApplicationContext 已经加载spring容器
-
-		InstanceA a = (InstanceA) getBean(beanName);
-
-		a.say();
-	}
-
-
-	// 一级缓存 单例池   成熟态Bean
-	private static Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
-
-	// 二级缓存   纯净态Bean (存储不完整的Bean用于解决循环依赖中多线程读取一级缓存的脏数据)
-	// 所以当有了三级缓存后，它还一定要存在，  因为它要存储的 aop创建的动态代理对象,  不可能重复创建
-	private static Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>(256);
-
-	// 三级缓存
-	private static Map<String, ObjectFactory<Object>> factoryEarlySingletonObjects = new ConcurrentHashMap<>(256);
-
-
-	// 标识当前是不是循环依赖   如果正在创建并且从一级缓存中没有拿到是不是说明是依赖
-	private static Set<String> singletonsCurrentlyInCreation =
-			Collections.newSetFromMap(new ConcurrentHashMap<>(16));
+	private static Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(16);
 
 	/**
-	 * 创建Bean
-	 *
-	 * @param beanName
-	 * @return
+	 * 读取bean定义，当然在spring中肯定是根据配置 动态扫描注册
 	 */
-	private static Object getBean(String beanName) throws Exception {
+	public static void loadBeanDefinitions() {
+		RootBeanDefinition aBeanDefinition = new RootBeanDefinition(InstanceA.class);
+		RootBeanDefinition bBeanDefinition = new RootBeanDefinition(InstanceB.class);
+		beanDefinitionMap.put("instanceA", aBeanDefinition);
+		beanDefinitionMap.put("instanceB", bBeanDefinition);
+	}
 
-		Class<?> beanClass = Class.forName(beanName);
+	public static void main(String[] args) throws Exception {
+		// 加载了BeanDefinition
+		loadBeanDefinitions();
+		// 注册Bean的后置处理器
 
+		// 循环创建Bean
+		for (Map.Entry<String, BeanDefinition> entry : beanDefinitionMap.entrySet()) {
+			String key = entry.getKey();
+			Object bean = getBean(key);
+		}
+		InstanceA instanceA = (InstanceA) getBean("instanceA");
+		instanceA.say();
+	}
 
-		Object bean = getSingleton(beanName);
+	// 一级缓存
+	public static Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
+	// 二级缓存： 为了将 成熟Bean和纯净Bean分离，避免读取到不完整得Bean
+	public static Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>();
+	// 三级缓存
+	public static Map<String, ObjectFactory<Object>> singletonFactories = new ConcurrentHashMap<>();
+	// 循环依赖标识
+	public static Set<String> singletonsCurrentlyInCreation = new HashSet<>();
 
-		if (bean != null) {
-			return bean;
+	// 假设A 使用了Aop @PointCut("execution(* *..InstanceA.*(..))")   要给A创建动态代理
+	// 获取Bean
+	public static Object getBean(String beanName) throws Exception {
+		Object singleton = getSingleton(beanName);
+		if (singleton != null) {
+			return singleton;
 		}
 
-
-		// 开始创建Bean
-
-		singletonsCurrentlyInCreation.add(beanName);
-
-		// 1.实例化
-		Object beanInstanc = beanClass.newInstance();
-
-		ObjectFactory<Object> factory = () -> {
-			JdkProxyBeanPostProcessor beanPostProcessor = new JdkProxyBeanPostProcessor();
-			return beanPostProcessor.getEarlyBeanReference(bean, beanName);
-		};
-		factoryEarlySingletonObjects.put(beanName, factory);
-		//  只是循环依赖才创建动态代理？   //创建动态代理
-
-		// Spring 为了解决 aop下面循环依赖会在这个地方创建动态代理 Proxy.newProxyInstance
-		// Spring 是不会将aop的代码跟ioc写在一起
-		// 不能直接将Proxy存入二级缓存中
-		// 是不是所有的Bean都存在循环依赖  当存在循环依赖才去调用aop的后置处理器创建动态代理
-
-		// 存入二级缓存
-		// earlySingletonObjects.put(beanName,beanInstanc);
-
-		// 2.属性赋值 解析Autowired
-		// 拿到所有的属性名
-		Field[] declaredFields = beanClass.getDeclaredFields();
-
-
-		// 循环所有属性
-		for (Field declaredField : declaredFields) {
-			// 从属性上拿到@Autowired
-			Autowired annotation = declaredField.getAnnotation(Autowired.class);
-
-			// 说明属性上面有@Autowired
-			if (annotation != null) {
-				Class<?> type = declaredField.getType();
-
-				//com.adam.k8.circulardependencies.InstanceB
-				getBean(type.getName());
+		Object instanceBean;
+		synchronized (singletonObjects) {
+			if (singletonObjects.containsKey(beanName)) {
+				return singletonObjects.get(beanName);
 			}
 
-		}
+			// 正在创建
+			if (!singletonsCurrentlyInCreation.contains(beanName)) {
+				singletonsCurrentlyInCreation.add(beanName);
+			}
+			// createBean
+			// 实例化
+			RootBeanDefinition beanDefinition = (RootBeanDefinition) beanDefinitionMap.get(beanName);
+			Class<?> beanClass = beanDefinition.getBeanClass();
+			instanceBean = beanClass.newInstance();  // 通过无参构造函数
 
+			// 创建动态代理  （耦合 BeanPostProcessor)    Spring还是希望正常的Bean 还是再初始化后创建
+			// 只在循环依赖的情况下在实例化后创建proxy   判断当前是不是循环依赖
+			Object finalInstanceBean = instanceBean;
+			singletonFactories.put(beanName, () -> new JdkProxyBeanPostProcessor().getEarlyBeanReference(
+					finalInstanceBean,
+					beanName)
+			);
 
-		// 3.初始化 (省略）
-		// 创建动态代理
+			// 添加到二级缓存
+//			 earlySingletonObjects.put(beanName,instanceBean);
 
-		// 存入到一级缓存
-		singletonObjects.put(beanName, beanInstanc);
-		return beanInstanc;
-	}
-
-	private static Object getSingleton(String beanName) {
-		Object bean = singletonObjects.get(beanName);
-		// 如果一级缓存没有拿到  是不是就说明当前是循环依赖创建
-		if (bean == null && singletonsCurrentlyInCreation.contains(beanName)) {
-			// 调用bean的后置处理器创建动态代理
-
-
-			bean = earlySingletonObjects.get(beanName);
-			if (bean == null) {
-				ObjectFactory<Object> factory = factoryEarlySingletonObjects.get(beanName);
-				factory.getObject();
-
+			// 属性赋值
+			Field[] declaredFields = beanClass.getDeclaredFields();
+			for (Field declaredField : declaredFields) {
+				Autowired annotation = declaredField.getAnnotation(Autowired.class);
+				// 说明属性上面有Autowired
+				if (annotation != null) {
+					declaredField.setAccessible(true);
+					// instanceB
+					String name = declaredField.getName();
+					Object fileObject = getBean(name);   //拿到B得Bean
+					declaredField.set(instanceBean, fileObject);
+				}
 			}
 
+			// 初始化   init-method
+			// 放在这里创建已经完了  B里面的A 不是proxy
+			// 正常情况下会再 初始化之后创建proxy
+			// 由于递归完后A 还是原实例，， 所以要从二级缓存中拿到proxy
+			if (earlySingletonObjects.containsKey(beanName)) {
+				instanceBean = earlySingletonObjects.get(beanName);
+			}
+
+			// 添加到一级缓存   A
+			singletonObjects.put(beanName, instanceBean);
 		}
-		return bean;
+
+		return instanceBean;
 	}
 
-	private static Object getEarlyBeanReference(String beanName, Object bean) {
 
-		JdkProxyBeanPostProcessor beanPostProcessor = new JdkProxyBeanPostProcessor();
-		return beanPostProcessor.getEarlyBeanReference(bean, beanName);
+	public static Object getSingleton(String beanName) {
+		// 先从一级缓存中拿
+		Object singletonObject = singletonObjects.get(beanName);
+
+		// 说明是循环依赖
+		if (singletonObject == null && singletonsCurrentlyInCreation.contains(beanName)) {
+			synchronized (singletonObjects) {
+				singletonObject = earlySingletonObjects.get(beanName);
+				// 如果二级缓存没有就从三级缓存中拿
+				if (singletonObject == null) {
+					// 从三级缓存中拿
+					ObjectFactory<Object> factory = singletonFactories.get(beanName);
+					if (factory != null) {
+						// 拿到动态代理
+						singletonObject = factory.getObject();
+						earlySingletonObjects.put(beanName, singletonObject);
+						// ObjectFactory 包装对象从三级缓存中删除
+						singletonFactories.remove(beanName);
+					}
+				}
+			}
+		}
+		return singletonObject;
 	}
-
 }

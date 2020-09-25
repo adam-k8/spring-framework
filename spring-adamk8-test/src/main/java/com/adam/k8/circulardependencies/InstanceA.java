@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * Created by xsls on 2019/5/29.
  */
 @Component
-@Scope("prototype")
+//@Scope("prototype")
 public class InstanceA implements IApi {
 
 	@Autowired

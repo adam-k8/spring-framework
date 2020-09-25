@@ -8,11 +8,11 @@ import static java.lang.reflect.Proxy.newProxyInstance;
 /**
  * Created by xsls on 2019/10/14.
  */
-public class JdkDynimcProxy implements InvocationHandler {
+public class JdkDynamicProxy implements InvocationHandler {
 
 	private Object target;
 
-	public JdkDynimcProxy(Object target) {
+	public JdkDynamicProxy(Object target) {
 		this.target = target;
 	}
 
