@@ -57,20 +57,32 @@ final class PostProcessorRegistrationDelegate {
 			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {
 
 		// Invoke BeanDefinitionRegistryPostProcessors first, if any.
+		// 调用BeanDefinitionRegistryPostProcessor的后置处理器 Begin
+		// 定义已处理的后置处理器
 		Set<String> processedBeans = new HashSet<>();
 
+		//判断我们的beanFactory实现了BeanDefinitionRegistry(实现了该结构就有注册和获取Bean定义的能力）
 		if (beanFactory instanceof BeanDefinitionRegistry) {
+			//强行把我们的bean工厂转为BeanDefinitionRegistry，因为待会需要注册Bean定义
 			BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
+			//保存BeanFactoryPostProcessor类型的后置   BeanFactoryPostProcessor 提供修改
 			List<BeanFactoryPostProcessor> regularPostProcessors = new ArrayList<>();
+			//保存BeanDefinitionRegistryPostProcessor类型的后置处理器 BeanDefinitionRegistryPostProcessor 提供注册
 			List<BeanDefinitionRegistryPostProcessor> registryProcessors = new ArrayList<>();
 
+			//循环我们传递进来的beanFactoryPostProcessors
 			for (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) {
+				//判断我们的后置处理器是不是BeanDefinitionRegistryPostProcessor
 				if (postProcessor instanceof BeanDefinitionRegistryPostProcessor) {
+					//进行强制转化
 					BeanDefinitionRegistryPostProcessor registryProcessor =
 							(BeanDefinitionRegistryPostProcessor) postProcessor;
+					//调用他作为BeanDefinitionRegistryPostProcessor的处理器的后置方法
 					registryProcessor.postProcessBeanDefinitionRegistry(registry);
+					//添加到我们用于保存的BeanDefinitionRegistryPostProcessor的集合中
 					registryProcessors.add(registryProcessor);
-				} else {
+				} else {//若没有实现BeanDefinitionRegistryPostProcessor 接口，那么他就是BeanFactoryPostProcessor
+					//把当前的后置处理器加入到regularPostProcessors中
 					regularPostProcessors.add(postProcessor);
 				}
 			}
@@ -79,19 +91,31 @@ final class PostProcessorRegistrationDelegate {
 			// uninitialized to let the bean factory post-processors apply to them!
 			// Separate between BeanDefinitionRegistryPostProcessors that implement
 			// PriorityOrdered, Ordered, and the rest.
+			//定义一个集合用户保存当前准备创建的BeanDefinitionRegistryPostProcessor
 			List<BeanDefinitionRegistryPostProcessor> currentRegistryProcessors = new ArrayList<>();
 
 			// First, invoke the BeanDefinitionRegistryPostProcessors that implement PriorityOrdered.
+			//第一步:去容器中获取BeanDefinitionRegistryPostProcessor的bean的处理器名称
 			String[] postProcessorNames =
 					beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
+			//循环筛选出来的匹配BeanDefinitionRegistryPostProcessor的类型名称
 			for (String ppName : postProcessorNames) {
+				//判断是否实现了PriorityOrdered接口的
 				if (beanFactory.isTypeMatch(ppName, PriorityOrdered.class)) {
+					//显示的调用getBean()的方式获取出该对象然后加入到currentRegistryProcessors集合中去
 					currentRegistryProcessors.add(beanFactory.getBean(ppName, BeanDefinitionRegistryPostProcessor.class));
+					//同时也加入到processedBeans集合中去
 					processedBeans.add(ppName);
 				}
 			}
+			//对currentRegistryProcessors集合中BeanDefinitionRegistryPostProcessor进行排序
 			sortPostProcessors(currentRegistryProcessors, beanFactory);
+			// 把当前的加入到总的里面去
 			registryProcessors.addAll(currentRegistryProcessors);
+			/**
+			 * 在这里典型的BeanDefinitionRegistryPostProcessor就是ConfigurationClassPostProcessor
+			 * 用于进行bean定义的加载 比如我们的包扫描，@import  等等。。。。。。。。。
+			 */
 			invokeBeanDefinitionRegistryPostProcessors(currentRegistryProcessors, registry);
 			currentRegistryProcessors.clear();
 
@@ -268,6 +292,7 @@ final class PostProcessorRegistrationDelegate {
 	private static void invokeBeanDefinitionRegistryPostProcessors(
 			Collection<? extends BeanDefinitionRegistryPostProcessor> postProcessors, BeanDefinitionRegistry registry) {
 
+		//获取容器中的ConfigurationClassPostProcessor的后置处理器进行bean定义的扫描
 		for (BeanDefinitionRegistryPostProcessor postProcessor : postProcessors) {
 			postProcessor.postProcessBeanDefinitionRegistry(registry);
 		}

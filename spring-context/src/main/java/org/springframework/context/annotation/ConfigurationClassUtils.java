@@ -119,16 +119,23 @@ abstract class ConfigurationClassUtils {
 			}
 		}
 
+		/**
+		 * 判断是不是真正的配置类 就是判断当前的bean的class上有没有标注了@Configuration注解
+		 */
 		Map<String, Object> config = metadata.getAnnotationAttributes(Configuration.class.getName());
 		if (config != null && !Boolean.FALSE.equals(config.get("proxyBeanMethods"))) {
+			//设置了标记
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_FULL);
-		} else if (config != null || isConfigurationCandidate(metadata)) {
+		}
+		//这里判断该配置类是一个非正式的配置类(Component ComponentScan Import ImportResource)
+		else if (config != null || isConfigurationCandidate(metadata)) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_LITE);
 		} else {
 			return false;
 		}
 
 		// It's a full or lite configuration candidate... Let's determine the order value, if any.
+		//解析配置类上是否标注了@Order注解
 		Integer order = getOrder(metadata);
 		if (order != null) {
 			beanDef.setAttribute(ORDER_ATTRIBUTE, order);
@@ -147,11 +154,16 @@ abstract class ConfigurationClassUtils {
 	 */
 	public static boolean isConfigurationCandidate(AnnotationMetadata metadata) {
 		// Do not consider an interface or an annotation...
+		//若是接口直接返回false
 		if (metadata.isInterface()) {
 			return false;
 		}
 
 		// Any of the typical annotations found?
+		/**
+		 * 若该class上标注了Component,ComponentScan Import ImportResource
+		 * 当时没有标注@Configuration注解
+		 */
 		for (String indicator : candidateIndicators) {
 			if (metadata.isAnnotated(indicator)) {
 				return true;
@@ -159,6 +171,7 @@ abstract class ConfigurationClassUtils {
 		}
 
 		// Finally, let's look for @Bean methods...
+		//最后标注看是否有标注了@Bean 的方法
 		try {
 			return metadata.hasAnnotatedMethods(Bean.class.getName());
 		} catch (Throwable ex) {

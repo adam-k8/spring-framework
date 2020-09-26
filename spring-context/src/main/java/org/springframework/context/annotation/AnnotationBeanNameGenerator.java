@@ -81,7 +81,7 @@ public class AnnotationBeanNameGenerator implements BeanNameGenerator {
 		if (definition instanceof AnnotatedBeanDefinition) {
 			String beanName = determineBeanNameFromAnnotation((AnnotatedBeanDefinition) definition);
 			if (StringUtils.hasText(beanName)) {
-				// Explicit bean name found.
+				// Explicit bean name found.  自己设置了名字
 				return beanName;
 			}
 		}

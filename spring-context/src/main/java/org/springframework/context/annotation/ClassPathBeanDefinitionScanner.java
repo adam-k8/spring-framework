@@ -66,6 +66,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 
 	private BeanDefinitionDefaults beanDefinitionDefaults = new BeanDefinitionDefaults();
 
+	// 不想成为自动注入的候选  . 比如=“*UserService”所有这个名称结尾的都不会注入
 	@Nullable
 	private String[] autowireCandidatePatterns;
 
@@ -166,10 +167,15 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
 		this.registry = registry;
 
+		/**
+		 * 设置默认的扫描规则为true的话 默认是扫描所有的  若使用 includeFilters 来表示只包含需要设置为false
+		 */
 		if (useDefaultFilters) {
 			registerDefaultFilters();
 		}
+		//设置环境对象
 		setEnvironment(environment);
+		//设置资源加载器
 		setResourceLoader(resourceLoader);
 	}
 
@@ -253,21 +259,33 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 
 
 	/**
+	 * 方法实现说明:真正的扫描我们@MapperScan的backpackage指定的路径的
 	 * Perform a scan within the specified base packages.
 	 *
 	 * @param basePackages the packages to check for annotated classes
 	 * @return number of beans registered
 	 */
 	public int scan(String... basePackages) {
+		/**
+		 * 还没有扫描mapper包之前 容器中所有的bean定义个数
+		 */
 		int beanCountAtScanStart = this.registry.getBeanDefinitionCount();
 
+		/**
+		 * 真正的扫描我们的mapper包的mapper类
+		 * 此处调用的是子类的doScan因为被重写了
+		 */
 		doScan(basePackages);
 
+		// 注册系统中的配置类处理器
 		// Register annotation config processors, if necessary.
 		if (this.includeAnnotationConfig) {
 			AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry);
 		}
 
+		/**
+		 * 返回扫描出mapper的bean定义的个数
+		 */
 		return (this.registry.getBeanDefinitionCount() - beanCountAtScanStart);
 	}
 
@@ -282,19 +300,26 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 */
 	protected Set<BeanDefinitionHolder> doScan(String... basePackages) {
 		Assert.notEmpty(basePackages, "At least one base package must be specified");
+		//创建bean定义的holder对象用于保存扫描后生成的bean定义对象
 		Set<BeanDefinitionHolder> beanDefinitions = new LinkedHashSet<>();
+		//循环我们的包路径集合
 		for (String basePackage : basePackages) {
+			//找到候选的Components
 			Set<BeanDefinition> candidates = findCandidateComponents(basePackage);
 			for (BeanDefinition candidate : candidates) {
 				ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(candidate);
 				candidate.setScope(scopeMetadata.getScopeName());
+				//设置我们的beanName
 				String beanName = this.beanNameGenerator.generateBeanName(candidate, this.registry);
+				//这是默认配置 autowire-candidate
 				if (candidate instanceof AbstractBeanDefinition) {
 					postProcessBeanDefinition((AbstractBeanDefinition) candidate, beanName);
 				}
+				//获取@Lazy @DependsOn等注解的数据设置到BeanDefinition中
 				if (candidate instanceof AnnotatedBeanDefinition) {
 					AnnotationConfigUtils.processCommonDefinitionAnnotations((AnnotatedBeanDefinition) candidate);
 				}
+				//把我们解析出来的组件bean定义注册到我们的IOC容器中（容器中没有才注册）
 				if (checkCandidate(beanName, candidate)) {
 					BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(candidate, beanName);
 					definitionHolder =
